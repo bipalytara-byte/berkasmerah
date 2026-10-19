@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Berkas Merah: Detektif Bisnis Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light;
+  --wall:#cfded5; --wall-2:#bccfc4; --surface:#eef4ef; --ink:#1f2523; --ink-soft:#4b5a54;
+  --line:#97ada1;
+  --manila:#e4c98c; --manila-ink:#4a3a17;
+  --paper:#fbf8ef; --paper-ink:#1f2523; --paper-soft:#5d5a50; --paper-line:#d9d1bd;
+  --stamp:#5a3e8e; --string:#b3352b; --ok:#2f6b4f; --hl:#f6df72;
+  --overlay:rgba(18,28,24,.62);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --wall:#15201c; --wall-2:#1c2a25; --surface:#223029; --ink:#e4ebe7; --ink-soft:#a6b6ae;
+    --line:#3a4d45; --manila:#c9ab68; --manila-ink:#1f1708;
+    --paper:#ece5d2; --paper-ink:#1f2523; --paper-soft:#55524a; --paper-line:#cfc6af;
+    --stamp:#a990e0; --string:#e2685d; --ok:#79c9a2; --hl:#efd25a;
+    --overlay:rgba(4,8,6,.74);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --wall:#15201c; --wall-2:#1c2a25; --surface:#223029; --ink:#e4ebe7; --ink-soft:#a6b6ae;
+  --line:#3a4d45; --manila:#c9ab68; --manila-ink:#1f1708;
+  --paper:#ece5d2; --paper-ink:#1f2523; --paper-soft:#55524a; --paper-line:#cfc6af;
+  --stamp:#a990e0; --string:#e2685d; --ok:#79c9a2; --hl:#efd25a;
+  --overlay:rgba(4,8,6,.74);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{font-family:'Source Serif 4',Georgia,'Times New Roman',serif;background:var(--wall);color:var(--ink);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3,.tw{font-family:'Special Elite','Courier New',Courier,monospace;font-weight:400;letter-spacing:.01em}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--stamp);outline-offset:2px}
+
+/* HUD */
+#hud{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;display:flex;align-items:center;gap:10px 18px;flex-wrap:wrap;padding:10px 18px;background:var(--wall-2);border-bottom:2px solid var(--line)}
+#hud .brand{font-family:'Special Elite','Courier New',monospace;font-size:21px;margin-right:auto;display:flex;align-items:center;gap:10px}
+#hud .brand svg{width:26px;height:26px}
+.stat{font-family:'Special Elite','Courier New',monospace;font-size:15px;color:var(--ink-soft);white-space:nowrap}
+.stat b{color:var(--ink);font-weight:400}
+.hud-btns{display:flex;gap:8px}
+
+/* Buttons */
+.btn{font-family:'Special Elite','Courier New',monospace;font-size:16px;background:var(--manila);color:var(--manila-ink);border:2px solid var(--manila-ink);padding:9px 16px;border-radius:3px;box-shadow:3px 3px 0 var(--manila-ink);transition:transform .08s, box-shadow .08s}
+.btn:hover{filter:brightness(1.05)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--manila-ink)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:3px 3px 0 var(--manila-ink)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line);box-shadow:none}
+.btn.small{font-size:14px;padding:6px 11px}
+.btn.red{background:var(--string);color:#fff;border-color:#5a1510;box-shadow:3px 3px 0 #5a1510}
+
+main{max-width:1200px;margin:0 auto;padding:18px 18px 140px}
+.hidden{display:none!important}
+
+/* Title */
+.title-wrap{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:28px;align-items:center;margin-top:10px}
+@media (max-width:880px){.title-wrap{grid-template-columns:1fr}}
+.title-art{border:3px solid var(--manila-ink);border-radius:4px;overflow:hidden;background:#000}
+.title-art svg{display:block;width:100%;height:auto}
+.title-wrap h1{font-size:clamp(38px,6vw,64px);line-height:1;margin:0 0 6px}
+.title-wrap .sub{font-size:19px;color:var(--ink-soft);margin:0 0 18px;max-width:34ch}
+.field{display:flex;flex-direction:column;gap:6px;margin:14px 0}
+.field label{font-family:'Special Elite','Courier New',monospace;font-size:15px}
+.field input,.field textarea{font:inherit;padding:10px 12px;border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:3px}
+.field textarea{min-height:90px;font-size:13px;font-family:ui-monospace,Menlo,Consolas,monospace}
+.facts{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:15px;color:var(--ink-soft);margin:16px 0 0;padding:0;list-style:none}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* Case head */
+.casehead{display:flex;align-items:baseline;gap:6px 16px;flex-wrap:wrap;margin:4px 0 14px}
+.casehead h2{margin:0;font-size:clamp(24px,3.4vw,34px)}
+.casehead .where{color:var(--ink-soft);font-size:16px}
+.tag{font-family:'Special Elite','Courier New',monospace;font-size:13px;background:var(--stamp);color:#fff;padding:2px 8px;border-radius:2px}
+
+/* Investigate */
+.inv{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:18px;align-items:start}
+@media (max-width:900px){.inv{grid-template-columns:1fr}}
+.scene{border:3px solid var(--manila-ink);border-radius:4px;overflow:hidden;background:#000;position:relative}
+.scene svg{display:block;width:100%;height:auto}
+.scene .hint-strip{position:absolute;left:0;right:0;bottom:0;background:rgba(15,22,19,.78);color:#f2efe6;font-size:14px;padding:6px 12px}
+.hs{cursor:pointer;outline:none}
+.hs:hover,.hs:focus-visible{filter:brightness(1.12) drop-shadow(0 0 7px #ffe58a)}
+.hs.secret:hover,.hs.secret:focus-visible{filter:brightness(1.06)}
+.mk circle.pulse{animation:pulse 1.8s ease-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes pulse{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(2.4)}}
+@media (prefers-reduced-motion: reduce){.mk circle.pulse{animation:none;opacity:0}}
+
+.board{background:var(--surface);border:2px solid var(--line);border-radius:4px;padding:14px}
+.board h3{margin:0 0 4px;font-size:19px}
+.board .prog{font-size:14px;color:var(--ink-soft);margin:0 0 10px}
+.cluelist{list-style:none;margin:0 0 14px;padding:0;display:flex;flex-direction:column;gap:6px}
+.cluelist button{width:100%;text-align:left;display:flex;gap:10px;align-items:flex-start;background:transparent;border:1px solid var(--line);border-radius:3px;padding:8px 10px;font-size:15px;line-height:1.35}
+.cluelist button:hover{background:var(--wall)}
+.cluelist .dot{flex:0 0 18px;height:18px;border-radius:50%;border:2px solid var(--ink-soft);margin-top:1px;display:grid;place-items:center;font-size:12px}
+.cluelist .done .dot{background:var(--ok);border-color:var(--ok);color:#fff}
+.cluelist .sec .dot{background:var(--stamp);border-color:var(--stamp);color:#fff}
+.cluelist small{display:block;color:var(--ink-soft);font-size:13px}
+
+/* Modal + document */
+#modal{position:fixed;inset:0;background:var(--overlay);z-index:60;display:flex;align-items:flex-start;justify-content:center;padding:max(3vh,env(safe-area-inset-top,0px)) 12px 3vh;overflow:auto}
+.sheet{position:relative;background:var(--paper);color:var(--paper-ink);width:min(780px,100%);border-radius:2px;padding:26px clamp(18px,4vw,40px) 22px;box-shadow:0 18px 50px rgba(0,0,0,.35);background-image:repeating-linear-gradient(transparent 0 31px, rgba(120,100,60,.07) 31px 32px)}
+.sheet .kind{font-family:'Special Elite','Courier New',monospace;font-size:14px;color:var(--paper-soft)}
+.sheet h2{margin:2px 0 14px;font-size:clamp(22px,3vw,30px);color:var(--paper-ink)}
+.stampmark{position:absolute;top:18px;right:22px;font-family:'Special Elite','Courier New',monospace;color:#5a3e8e;border:3px solid #5a3e8e;padding:2px 10px;transform:rotate(7deg);opacity:.75;font-size:15px}
+.mission{background:#efe0b4;border-left:5px solid #5a3e8e;padding:10px 14px;margin:0 0 18px;font-size:16px;color:#2a2416}
+.mission.secret{border-left-color:#b3352b;background:#f3d6cf}
+.docbody{font-size:17px}
+.blk{margin:0 0 14px;padding:2px 0}
+.blk.hinted{outline:2px dashed #5a3e8e;outline-offset:6px;border-radius:2px}
+.u{cursor:pointer;border-radius:2px;padding:0 2px;transition:background .15s}
+.u:hover,.u:focus-visible{background:rgba(90,62,142,.13)}
+.u.miss{text-decoration:line-through;text-decoration-color:#b3352b;text-decoration-thickness:2px;color:#7b766b;cursor:default}
+.u.hit{background:var(--hl);color:#1f2523;box-shadow:0 0 0 2px var(--hl)}
+.solved .u{cursor:default}
+.solved .u:hover{background:transparent}
+.solved .u.hit:hover{background:var(--hl)}
+.chat .msg{display:block;margin:0 0 8px;padding:6px 10px;border-radius:6px;background:rgba(255,255,255,.55);border:1px solid var(--paper-line)}
+.chat .who{font-weight:600;font-size:14px;display:block;color:#3b4a44}
+.doclist{margin:0;padding-left:20px}
+.doclist li{margin:0 0 6px}
+.dtable{width:100%;border-collapse:collapse;font-size:15px}
+.dtable th{text-align:left;font-family:'Special Elite','Courier New',monospace;font-weight:400;border-bottom:2px solid #8a8370;padding:5px 6px}
+.dtable td{border-bottom:1px solid var(--paper-line);padding:6px;vertical-align:top}
+.dtable tr.u{display:table-row}
+.dtable tr.u.hit td{background:var(--hl)}
+.tablewrap{overflow-x:auto}
+.sheet-foot{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:18px;border-top:1px dashed #b5ab92;padding-top:14px}
+.found-note{margin-top:16px;background:#dfeee4;border:2px solid #2f6b4f;padding:12px 14px;color:#1d3b2c}
+.found-note b{font-family:'Special Elite','Courier New',monospace;font-weight:400}
+.bigstamp{position:absolute;right:34px;bottom:96px;font-family:'Special Elite','Courier New',monospace;font-size:30px;color:#2f6b4f;border:4px double #2f6b4f;padding:4px 14px;transform:rotate(-9deg);pointer-events:none;animation:thump .35s ease-out}
+@keyframes thump{0%{transform:rotate(-9deg) scale(1.8);opacity:0}100%{transform:rotate(-9deg) scale(1);opacity:.9}}
+@media (prefers-reduced-motion: reduce){.bigstamp{animation:none}}
+.shake{animation:shake .32s}
+@keyframes shake{25%{transform:translateX(-4px)}50%{transform:translateX(4px)}75%{transform:translateX(-2px)}}
+
+/* Toast */
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#1f2523;color:#f3efe4;padding:10px 16px;border-radius:3px;font-size:15px;z-index:90;max-width:90vw;box-shadow:0 6px 20px rgba(0,0,0,.3)}
+
+/* Dialog */
+#dlg{position:fixed;left:0;right:0;bottom:0;z-index:50;padding:0 12px calc(12px + env(safe-area-inset-bottom,0px))}
+.dlg-box{max-width:980px;margin:0 auto;display:grid;grid-template-columns:110px minmax(0,1fr);gap:16px;background:var(--paper);color:var(--paper-ink);border:3px solid var(--manila-ink);border-radius:4px;padding:14px 16px;box-shadow:0 -8px 30px rgba(0,0,0,.25)}
+.dlg-box.nar{grid-template-columns:1fr}
+.dlg-por{width:110px;height:110px;background:#cddcd2;border:2px solid var(--manila-ink);border-radius:3px;overflow:hidden}
+.dlg-por svg{width:100%;height:100%;display:block}
+.dlg-name{font-family:'Special Elite','Courier New',monospace;font-size:17px;color:#5a3e8e;margin-bottom:2px}
+.dlg-text{font-size:18px;min-height:3.2em}
+.dlg-nar .dlg-text{font-style:italic}
+.dlg-ctl{display:flex;justify-content:flex-end;gap:8px;margin-top:8px}
+@media (max-width:600px){.dlg-box{grid-template-columns:64px minmax(0,1fr)}.dlg-por{width:64px;height:64px}.dlg-text{font-size:16px}}
+
+/* Question */
+.qwrap{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:18px;align-items:start}
+@media (max-width:900px){.qwrap{grid-template-columns:1fr}}
+.qcard{background:var(--paper);color:var(--paper-ink);border:2px solid var(--manila-ink);border-radius:3px;padding:22px clamp(16px,3vw,30px)}
+.qmeta{font-family:'Special Elite','Courier New',monospace;font-size:14px;color:var(--paper-soft)}
+.qcard h2{font-size:clamp(20px,2.6vw,26px);margin:6px 0 10px;color:var(--paper-ink);line-height:1.25}
+.qcard .ctx{color:#3e3b33;margin:0 0 14px;max-width:70ch}
+.opts{display:flex;flex-direction:column;gap:9px}
+.opt{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;text-align:left;background:#fffdf7;border:2px solid #cbbf9f;border-radius:3px;padding:10px 12px;color:#1f2523;line-height:1.4}
+.opt .let{font-family:'Special Elite','Courier New',monospace;font-size:18px;color:#5a3e8e}
+.opt:hover{border-color:#5a3e8e}
+.opt.sel{border-color:#5a3e8e;background:#ece4f7;box-shadow:inset 0 0 0 1px #5a3e8e}
+.qfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:18px}
+.qfoot .note{font-size:14px;color:var(--paper-soft)}
+.evcards{display:flex;flex-direction:column;gap:8px;max-height:60vh;overflow:auto}
+.evcard{background:var(--paper);color:var(--paper-ink);border:1px solid var(--paper-line);border-left:5px solid var(--string);padding:8px 10px;font-size:14px;line-height:1.4;border-radius:2px;text-align:left}
+.evcard b{font-family:'Special Elite','Courier New',monospace;font-weight:400;display:block;font-size:14px}
+.evcard.pick{cursor:pointer}
+.evcard.pick.on{border-left-color:#5a3e8e;background:#ece4f7;box-shadow:inset 0 0 0 2px #5a3e8e}
+.evcard.sec{border-left-color:#5a3e8e}
+
+/* Minigame */
+.mg-grid{display:flex;flex-direction:column;gap:10px}
+.mg-item{background:#fffdf7;border:1px solid #cbbf9f;border-radius:3px;padding:10px 12px;color:#1f2523}
+.mg-item p{margin:0 0 8px}
+.boxes{display:flex;flex-wrap:wrap;gap:6px}
+.boxes button{width:38px;height:36px;border:2px solid #b5a982;background:#fff;border-radius:3px;font-family:'Special Elite','Courier New',monospace;font-size:16px;color:#1f2523}
+.boxes button.on{background:#5a3e8e;border-color:#5a3e8e;color:#fff}
+.bmc{display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:auto auto auto;gap:3px;font-size:12px;margin:8px 0 16px}
+.bmc div{background:#fffdf7;border:1px solid #b5a982;padding:6px;color:#1f2523;line-height:1.25}
+.bmc b{font-family:'Special Elite','Courier New',monospace;font-weight:400;color:#5a3e8e;font-size:14px;display:block}
+.bmc .kp{grid-column:1;grid-row:1/3}.bmc .ka{grid-column:2;grid-row:1}.bmc .kr{grid-column:2;grid-row:2}
+.bmc .vp{grid-column:3;grid-row:1/3}.bmc .cr{grid-column:4;grid-row:1}.bmc .chn{grid-column:4;grid-row:2}
+.bmc .cs{grid-column:5;grid-row:1/3}.bmc .cost{grid-column:1/4;grid-row:3}.bmc .rev{grid-column:4/6;grid-row:3}
+
+/* Chapter end, ending, resume */
+.paperpage{background:var(--paper);color:var(--paper-ink);border:2px solid var(--manila-ink);border-radius:3px;padding:26px clamp(16px,4vw,40px);position:relative;max-width:900px;margin:0 auto}
+.paperpage h2{margin:0 0 6px;color:var(--paper-ink);font-size:clamp(24px,3.4vw,34px)}
+.paperpage p{max-width:72ch}
+.closedstamp{position:absolute;top:22px;right:24px;font-family:'Special Elite','Courier New',monospace;color:#b3352b;border:3px solid #b3352b;padding:3px 12px;transform:rotate(8deg);font-size:20px}
+.kv{display:flex;flex-wrap:wrap;gap:8px 26px;margin:14px 0;padding:0;list-style:none;font-size:16px}
+.kv b{font-family:'Special Elite','Courier New',monospace;font-weight:400;font-size:22px;display:block}
+.ending-art{border:3px solid var(--manila-ink);border-radius:4px;overflow:hidden;max-width:900px;margin:0 auto 18px;background:#000}
+.ending-art svg{display:block;width:100%;height:auto}
+.outcomes{list-style:none;padding:0;margin:14px 0}
+.outcomes li{border-top:1px dashed #b5ab92;padding:10px 0;display:grid;grid-template-columns:150px minmax(0,1fr);gap:12px}
+@media (max-width:600px){.outcomes li{grid-template-columns:1fr;gap:2px}}
+.outcomes .lbl{font-family:'Special Elite','Courier New',monospace;color:#5a3e8e}
+.rtable{width:100%;border-collapse:collapse;font-size:14px;margin:8px 0 18px}
+.rtable th{text-align:left;font-family:'Special Elite','Courier New',monospace;font-weight:400;border-bottom:2px solid #8a8370;padding:5px 6px;white-space:nowrap}
+.rtable td{border-bottom:1px solid var(--paper-line);padding:6px;vertical-align:top}
+.rtable td.pt{white-space:nowrap;text-align:center;font-family:'Special Elite','Courier New',monospace}
+.ok{color:#2f6b4f}.bad{color:#b3352b}.mid{color:#8a5a00}
+.res-ch{margin:26px 0 0;padding-top:12px;border-top:3px double #8a8370}
+.res-ch h3{margin:0 0 4px;font-size:22px;color:var(--paper-ink)}
+.lesson{background:#efe0b4;padding:10px 14px;border-left:5px solid #5a3e8e;margin:8px 0 12px;font-size:15px}
+
+/* Notebook */
+.nb-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 14px}
+.nb-tabs button{border:2px solid #b5a982;background:#fffdf7;padding:6px 12px;border-radius:3px;font-family:'Special Elite','Courier New',monospace;font-size:14px;color:#1f2523}
+.nb-tabs button.on{background:#5a3e8e;border-color:#5a3e8e;color:#fff}
+.nb-tabs button:disabled{opacity:.4;cursor:not-allowed}
+.nb h4{font-family:'Special Elite','Courier New',monospace;font-weight:400;font-size:18px;margin:18px 0 6px;color:#5a3e8e}
+.nb p,.nb li{font-size:16px}
+.nb table{border-collapse:collapse;width:100%;font-size:14px}
+.nb td,.nb th{border-bottom:1px solid var(--paper-line);padding:5px 6px;text-align:left;vertical-align:top}
+.nb th{font-family:'Special Elite','Courier New',monospace;font-weight:400}
+
+@media print{
+  #hud,#dlg,#toast,.noprint{display:none!important}
+  body{background:#fff}
+  main{padding:0;max-width:none}
+  .paperpage{border:none;padding:0;max-width:none;background:#fff}
+  .res-ch{break-inside:auto}
+  .rtable tr{break-inside:avoid}
+}
+@media (max-width:600px){.scene .hint-strip{position:static}}
+.rtable.wide{min-width:720px}
+#sndPanel{position:fixed;top:calc(64px + env(safe-area-inset-top,0px));right:16px;z-index:40;background:var(--paper);color:var(--paper-ink);border:2px solid var(--manila-ink);border-radius:3px;padding:14px 16px;width:250px;box-shadow:4px 4px 0 var(--manila-ink);display:flex;flex-direction:column;gap:10px;font-size:15px}
+#sndPanel.hidden{display:none}
+#sndPanel label{display:flex;flex-direction:column;gap:4px;font-family:'Special Elite','Courier New',monospace}
+#sndPanel label.sw{flex-direction:row;align-items:center;gap:8px}
+#sndPanel input[type=range]{accent-color:#5a3e8e;width:100%}
+#sndPanel p{margin:0;font-size:13px;color:var(--paper-soft)}
+</style>
+</head>
+<body>
+<header id="hud">
+  <div class="brand"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="7" width="26" height="20" rx="2" fill="#e4c98c" stroke="#4a3a17" stroke-width="2"/><path d="M3 11h10l3-4h13" fill="none" stroke="#4a3a17" stroke-width="2"/><circle cx="23" cy="19" r="4" fill="none" stroke="#b3352b" stroke-width="2.4"/><path d="M26 22l3 3" stroke="#b3352b" stroke-width="2.4"/></svg>Berkas Merah</div>
+  <span class="stat" id="hCase">Biro Telisik</span>
+  <span class="stat">Bukti <b id="hClues">0/24</b></span>
+  <span class="stat">Bisikan <b id="hHints">0</b></span>
+  <span class="stat">Waktu <b id="hTime">00:00:00</b></span>
+  <div class="hud-btns">
+    <button class="btn small ghost" id="bNote">Buku Saku</button>
+    <button class="btn small ghost" id="bSave">Simpan</button>
+    <button class="btn small ghost" id="bSound" aria-pressed="true">Suara</button>
+    <button class="btn small ghost" id="bTheme" aria-label="Ganti tema terang/gelap">Tema</button>
+  </div>
+</header>
+<div id="sndPanel" class="hidden" role="dialog" aria-label="Pengaturan suara">
+  <label class="sw"><input type="checkbox" id="sOn" checked> Suara aktif</label>
+  <label>Musik latar<input type="range" id="sMus" min="0" max="100" value="60"></label>
+  <label>Efek suara<input type="range" id="sSfx" min="0" max="100" value="80"></label>
+  <label>Suasana TKP<input type="range" id="sAmb" min="0" max="100" value="70"></label>
+  <p>Pakai headset supaya suasananya lebih terasa.</p>
+</div>
+<main id="stage"></main>
+<div id="modal" class="hidden"></div>
+<div id="dlg" class="hidden"></div>
+<div id="toast" class="hidden" role="status" aria-live="polite"></div>
+<style>
+.sheet .btn.ghost,.qcard .btn.ghost,.paperpage .btn.ghost{color:var(--paper-ink);border-color:#8a8370}
+.sheet .cluelist button{color:var(--paper-ink);border-color:var(--paper-line)}
+.sheet .cluelist button:hover{background:#efe7d2}
+.sheet .cluelist .dot{border-color:#5d5a50}
+.sheet .field textarea{background:#fffdf7;color:#1f2523;border-color:#b5a982}
+.sheet p{color:var(--paper-ink)}
+</style>
+<script>
+/* ================= ILUSTRASI ================= */
+function person(x,y,o){
+  o=o||{};const s=o.s||1,sk=o.skin||'#c98d63',sh=o.shirt||'#3f6f8f',hr=o.hair||'#2a1d16';
+  let g='<g transform="translate('+x+','+y+') scale('+s+')">';
+  g+='<path d="M-25 72 Q-25 27 0 25 Q25 27 25 72 Z" fill="'+sh+'"/>';
+  if(o.collar)g+='<path d="M-8 26 L0 36 L8 26" fill="none" stroke="'+o.collar+'" stroke-width="3"/>';
+  if(o.hijab){
+    g+='<path d="M-22 2 Q-23 -24 0 -25 Q23 -24 22 2 Q21 30 0 34 Q-21 30 -22 2Z" fill="'+o.hijab+'"/>';
+    g+='<ellipse cx="0" cy="0" rx="13" ry="15" fill="'+sk+'"/>';
+    g+='<path d="M-14 -6 Q-12 -18 0 -18 Q12 -18 14 -6 Q12 -13 0 -13 Q-12 -13 -14 -6Z" fill="'+o.hijab+'"/>';
+  }else{
+    g+='<rect x="-6" y="10" width="12" height="16" fill="'+sk+'"/>';
+    if(o.long)g+='<path d="M-18 -4 Q-20 24 -12 30 L12 30 Q20 24 18 -4Z" fill="'+hr+'"/>';
+    g+='<circle cx="0" cy="0" r="16" fill="'+sk+'"/>';
+    g+='<path d="M-16.5 -1 Q-18 -21 0 -20 Q18 -21 16.5 -1 Q13 -12 0 -12 Q-13 -12 -16.5 -1Z" fill="'+hr+'"/>';
+    if(o.long)g+='<path d="M-16 -2 Q-17 10 -14 16 L-12 -6Z M16 -2 Q17 10 14 16 L12 -6Z" fill="'+hr+'"/>';
+  }
+  if(o.peci)g+='<path d="M-14 -11 L-13 -23 Q0 -26 13 -23 L14 -11 Q0 -14 -14 -11Z" fill="#1d1d1d"/>';
+  if(o.cap)g+='<path d="M-16 -8 Q-16 -24 0 -24 Q16 -24 16 -8Z" fill="'+o.cap+'"/><path d="M4 -10 L26 -8 L24 -4 L4 -6Z" fill="'+o.cap+'"/>';
+  if(o.fedora)g+='<path d="M-26 -10 Q0 -16 26 -10 Q22 -6 0 -7 Q-22 -6 -26 -10Z" fill="#3b2f25"/><path d="M-14 -10 L-12 -27 Q0 -31 12 -27 L14 -10Z" fill="#4a3b2e"/><rect x="-13" y="-15" width="26" height="4" fill="#b3352b"/>';
+  g+='<circle cx="-5.5" cy="0" r="1.9" fill="#1b1b1b"/><circle cx="5.5" cy="0" r="1.9" fill="#1b1b1b"/>';
+  if(o.glasses)g+='<g fill="none" stroke="#1b1b1b" stroke-width="1.4"><circle cx="-5.5" cy="0" r="4.6"/><circle cx="5.5" cy="0" r="4.6"/><path d="M-1 0 H1"/></g>';
+  if(o.mustache)g+='<path d="M-6 5.5 Q0 3 6 5.5 Q0 7.5 -6 5.5Z" fill="#6d6d68"/>';
+  g+= o.sad ? '<path d="M-4.5 9.5 Q0 6.5 4.5 9.5" fill="none" stroke="#5a2a1f" stroke-width="1.6" stroke-linecap="round"/>'
+            : '<path d="M-4.5 7.5 Q0 11 4.5 7.5" fill="none" stroke="#5a2a1f" stroke-width="1.6" stroke-linecap="round"/>';
+  g+='</g>';return g;
+}
+const CAST={
+  wening:{name:'Inspektur Wening',o:{skin:'#b97a52',shirt:'#4b3b6b',hijab:'#2f4a43',glasses:true}},
+  det:{name:'Detektif',o:{skin:'#bf8660',shirt:'#6b5a43',hair:'#1b1410',fedora:true,collar:'#e4c98c'}},
+  harjo:{name:'Pak Harjo',o:{skin:'#a8714c',shirt:'#d8cfb8',hair:'#9a9a94',peci:true,mustache:true}},
+  tutik:{name:'Mbak Tutik',o:{skin:'#c58a5f',shirt:'#b3352b',hijab:'#e0a458'}},
+  dewi:{name:'Dewi',o:{skin:'#d49a70',shirt:'#d36d8c',hair:'#2a1d16',long:true}},
+  rani:{name:'Rani',o:{skin:'#c99068',shirt:'#2f6b8f',hijab:'#e4c98c'}},
+  bayu:{name:'Bayu',o:{skin:'#b47b54',shirt:'#2e6f62',hair:'#1b1410',cap:'#e4c98c'}},
+  ratna:{name:'Bu Ratna',o:{skin:'#c99068',shirt:'#6d2e46',hijab:'#9c6b94'}},
+  nadia:{name:'Nadia',o:{skin:'#d4a07a',shirt:'#5f7fb5',hijab:'#e9d7b4'}},
+  sari:{name:'Mbak Sari',o:{skin:'#c78b62',shirt:'#e07a3f',hair:'#3a2418',long:true}},
+  gilang:{name:'Mas Gilang',o:{skin:'#a96f48',shirt:'#55606b',hair:'#1b1410',sad:true}},
+  wahyu:{name:'Mas Wahyu',o:{skin:'#9e6640',shirt:'#c9a227',hair:'#1b1410',cap:'#b3352b'}},
+  laras:{name:'Kak Laras',o:{skin:'#d6a37c',shirt:'#26425e',hair:'#1b1410',long:true,glasses:true}},
+  dimas:{name:'Dimas',o:{skin:'#b98058',shirt:'#2f6b4f',hair:'#1b1410'}},
+  narti:{name:'Bu Narti',o:{skin:'#a96f48',shirt:'#e6e1d3',hijab:'#b3352b'}},
+  darmo:{name:'Pak Darmo, Kepala Dinas',o:{skin:'#a8714c',shirt:'#8a7a45',hair:'#3a3a3a',peci:true,glasses:true,collar:'#5a4f2a'}},
+  nar:{name:''}
+};
+function portrait(w){const c=CAST[w];if(!c||!c.o)return '';return '<svg viewBox="-38 -36 76 76" aria-hidden="true"><rect x="-38" y="-36" width="76" height="76" fill="#cddcd2"/>'+person(0,0,c.o)+'</svg>';}
+function hs(id,label,inner,secret){return '<g class="hs'+(secret?' secret':'')+'" data-id="'+id+'" tabindex="0" role="button" aria-label="'+label+'">'+inner+'</g>';}
+function txt(x,y,t,size,fill,anchor,fam){return '<text x="'+x+'" y="'+y+'" font-size="'+size+'" fill="'+fill+'" text-anchor="'+(anchor||'middle')+'" font-family="'+(fam||"Special Elite,Courier New,monospace")+'">'+t+'</text>';}
+function lines(x,y,w,n,gap,col){let s='';for(let i=0;i<n;i++)s+='<rect x="'+x+'" y="'+(y+i*gap)+'" width="'+(w*(i%3===2?0.6:1))+'" height="2" fill="'+(col||'#9b9282')+'"/>';return s;}
+
+/* Kantor Biro Telisik (judul, prolog, sidang) */
+function sceneOffice(mode){
+  let s='<svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kantor Biro Telisik">';
+  s+='<rect width="800" height="450" fill="#2f4a43"/><rect y="250" width="800" height="200" fill="#26403a"/>';
+  // jendela + Gunung Lawu senja
+  s+='<rect x="520" y="40" width="240" height="170" fill="#e9a66a"/><rect x="520" y="40" width="240" height="80" fill="#c76b5b"/>';
+  s+='<path d="M520 170 L600 112 L640 128 L700 80 L760 140 L760 210 L520 210Z" fill="#3a3550"/><path d="M520 190 Q600 170 760 186 L760 210 L520 210Z" fill="#2b2a3c"/>';
+  s+='<circle cx="610" cy="88" r="16" fill="#f6d68a"/>';
+  s+='<rect x="514" y="34" width="252" height="182" fill="none" stroke="#1d2e29" stroke-width="10"/><rect x="636" y="40" width="8" height="170" fill="#1d2e29"/>';
+  // papan gabus
+  s+='<rect x="40" y="36" width="440" height="230" fill="#a9784b" stroke="#5c4330" stroke-width="8"/>';
+  const files=[[70,60,'BERKAS 1'],[190,110,'BERKAS 2'],[300,58,'BERKAS 3'],[380,150,'BERKAS 4']];
+  files.forEach((f,i)=>{s+='<g transform="rotate('+(i%2?4:-5)+' '+(f[0]+40)+' '+(f[1]+30)+')"><rect x="'+f[0]+'" y="'+f[1]+'" width="86" height="64" fill="#e4c98c" stroke="#4a3a17" stroke-width="2"/>'+txt(f[0]+43,f[1]+24,f[2],12,'#4a3a17')+lines(f[0]+10,f[1]+34,66,3,8,'#b39a62')+'</g>';});
+  s+='<path d="M113 70 L233 120 L343 68 L423 160 M113 70 L180 210 L423 160" fill="none" stroke="#b3352b" stroke-width="2.4"/>';
+  [[113,70],[233,120],[343,68],[423,160],[180,210]].forEach(p=>{s+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="6" fill="#d9483b" stroke="#5a1510" stroke-width="1.5"/>';});
+  s+='<rect x="110" y="190" width="120" height="58" fill="#f4efe1" transform="rotate(-3 170 219)"/>'+txt(170,214,'Dana Pendampingan',10,'#3b3b3b')+txt(170,230,'Rp150.000.000',13,'#b3352b');
+  // meja
+  s+='<rect x="0" y="330" width="800" height="26" fill="#6b4a2f"/><rect x="0" y="356" width="800" height="94" fill="#4f3622"/>';
+  // mesin ketik
+  s+='<path d="M300 330 L318 280 L470 280 L488 330Z" fill="#2b2b2b"/><rect x="330" y="262" width="128" height="22" rx="4" fill="#3d3d3d"/><rect x="345" y="230" width="98" height="36" fill="#f8f4e8"/>';
+  for(let r=0;r<3;r++)for(let k=0;k<9;k++)s+='<circle cx="'+(336+k*14+r*4)+'" cy="'+(296+r*11)+'" r="4" fill="#d8d2c2"/>';
+  // lampu meja
+  s+='<path d="M640 330 L660 330 L655 250 L645 250Z" fill="#2c3b36"/><path d="M600 250 Q640 196 690 250Z" fill="#b3352b"/><path d="M600 250 L560 330 L740 330 L690 250Z" fill="#fff3c4" opacity=".18"/>';
+  // berkas di meja
+  s+='<rect x="90" y="300" width="150" height="32" fill="#e4c98c" stroke="#4a3a17" stroke-width="2" transform="rotate(-4 165 316)"/>'+txt(165,321,'RAHASIA',14,'#5a3e8e');
+  if(mode==='dinas'){s+=person(560,282,Object.assign({s:1.25},CAST.darmo.o));}
+  else s+=person(560,282,Object.assign({s:1.25},CAST.wening.o));
+  s+='</svg>';return s;
+}
+
+/* Berkas 1: Percetakan Sumber Jaya */
+function scene1(){
+  let s='<svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Interior Percetakan Sumber Jaya">';
+  s+='<rect width="800" height="450" fill="#cddcd2"/><rect width="800" height="40" fill="#b5c9bd"/><rect y="372" width="800" height="78" fill="#7b5d43"/>';
+  for(let i=0;i<9;i++)s+='<path d="M'+(i*100)+' 372 L'+(i*100-40)+' 450" stroke="#6a4e37" stroke-width="2"/>';
+  s+='<rect x="0" y="300" width="800" height="72" fill="#bccfc4"/>';
+  s+='<rect x="250" y="50" width="300" height="48" rx="3" fill="#2f4a43"/>'+txt(400,80,'PERCETAKAN SUMBER JAYA',21,'#e4c98c')+txt(400,93,'sejak 2004',10,'#cddcd2');
+  // pintu
+  s+='<rect x="24" y="150" width="110" height="222" fill="#8c6b4a" stroke="#5c4330" stroke-width="4"/><rect x="38" y="166" width="82" height="90" fill="#a9c7d6" opacity=".85"/><circle cx="118" cy="275" r="5" fill="#e4c98c"/>';
+  s+=txt(79,212,'BUKA',14,'#2f4a43');
+  // mesin offset
+  s+='<rect x="160" y="230" width="150" height="142" rx="6" fill="#59636a"/><rect x="172" y="244" width="126" height="40" fill="#3f474d"/><circle cx="200" cy="264" r="15" fill="#2a3035" stroke="#8b959b" stroke-width="3"/><circle cx="270" cy="264" r="15" fill="#2a3035" stroke="#8b959b" stroke-width="3"/><rect x="176" y="300" width="118" height="10" fill="#e8e3d6"/><rect x="176" y="316" width="118" height="44" fill="#4a5258"/>';
+  s+='<path d="M180 230 Q200 214 230 222" fill="none" stroke="#9aa3a8" stroke-width="2" stroke-dasharray="3 4"/>';
+  // brosur (a4)
+  s+=hs('a4','Brosur di bawah pintu','<g transform="translate(150 384) rotate(-10)"><rect x="-38" y="-24" width="76" height="48" fill="#ffffff" stroke="#c43" stroke-width="1.5"/><rect x="-38" y="-24" width="76" height="13" fill="#e2483a"/>'+txt(0,-14,'CetakKilat.id',9,'#fff','middle','Arial,sans-serif')+lines(-30,-4,60,3,7,'#c7b9b0')+'</g>');
+  // papan pengumuman (a6)
+  s+=hs('a6','Papan pengumuman toko','<rect x="336" y="118" width="120" height="98" fill="#a9784b" stroke="#5c4330" stroke-width="5"/><rect x="346" y="128" width="54" height="40" fill="#fffbe9"/>'+txt(373,143,'TUNAI',10,'#b3352b')+txt(373,157,'SAJA',10,'#b3352b')+'<rect x="406" y="130" width="42" height="52" fill="#f2e3b3" transform="rotate(4 427 156)"/>'+lines(412,140,30,4,8)+'<rect x="350" y="174" width="50" height="34" fill="#dfe9f2"/>'+lines(355,182,40,3,8)+'<circle cx="373" cy="131" r="3" fill="#d9483b"/><circle cx="427" cy="133" r="3" fill="#d9483b"/>');
+  // bangku + HP undangan (a5)
+  s+='<rect x="330" y="330" width="122" height="12" fill="#8c6b4a"/><rect x="338" y="342" width="8" height="30" fill="#6b4a2f"/><rect x="436" y="342" width="8" height="30" fill="#6b4a2f"/>';
+  s+=hs('a5','HP berisi undangan digital','<rect x="372" y="306" width="26" height="24" rx="3" fill="#20262a" transform="rotate(-8 385 318)"/><rect x="375" y="309" width="20" height="17" fill="#f6d6e0" transform="rotate(-8 385 318)"/><path d="M381 315 q4 -4 4 0 q0 -4 4 0 q0 4 -4 7 q-4 -3 -4 -7z" fill="#d36d8c" transform="rotate(-8 385 318)"/>');
+  // rak + kalender
+  s+='<rect x="490" y="130" width="130" height="8" fill="#6b4a2f"/><rect x="490" y="180" width="130" height="8" fill="#6b4a2f"/>';
+  for(let i=0;i<5;i++)s+='<rect x="'+(496+i*24)+'" y="'+(108+(i%2)*6)+'" width="20" height="'+(22-(i%2)*6)+'" fill="'+['#f4efe1','#e4c98c','#dfe9f2','#f4efe1','#f2d2c8'][i]+'" stroke="#8a8370"/>';
+  for(let i=0;i<4;i++)s+='<rect x="'+(498+i*30)+'" y="'+(150+(i%2)*4)+'" width="26" height="'+(30-(i%2)*4)+'" fill="'+['#cbd9e6','#f4efe1','#e4c98c','#f4efe1'][i]+'" stroke="#8a8370"/>';
+  s+='<rect x="690" y="110" width="66" height="76" fill="#fff" stroke="#8a8370"/><rect x="690" y="110" width="66" height="18" fill="#b3352b"/>'+txt(723,123,'2026',11,'#fff');
+  for(let r=0;r<4;r++)for(let k=0;k<6;k++)s+='<rect x="'+(695+k*10)+'" y="'+(134+r*12)+'" width="7" height="8" fill="#e6e1d3"/>';
+  // Pak Harjo (a2)
+  s+=hs('a2','Pak Harjo, pemilik percetakan',person(640,214,Object.assign({s:1.45},CAST.harjo.o)));
+  // meja konter
+  s+='<rect x="470" y="286" width="316" height="86" fill="#8c6b4a"/><rect x="470" y="280" width="316" height="10" fill="#6b4a2f"/><rect x="484" y="304" width="140" height="56" fill="none" stroke="#6b4a2f" stroke-width="2"/><rect x="636" y="304" width="136" height="56" fill="none" stroke="#6b4a2f" stroke-width="2"/><rect x="545" y="328" width="18" height="4" fill="#e4c98c"/><rect x="696" y="328" width="18" height="4" fill="#e4c98c"/>';
+  // map biru rahasia (s1)
+  s+=hs('s1','Benda di laci konter','<path d="M752 362 L772 356 L776 370 L756 372Z" fill="#2f6b8f"/><rect x="744" y="360" width="34" height="6" fill="#2f6b8f" opacity=".0"/>',true);
+  // buku order (a1)
+  s+=hs('a1','Buku order bersampul batik','<g transform="rotate(-6 530 272)"><rect x="498" y="258" width="68" height="24" fill="#7a3b2e"/><path d="M500 262 h64 M500 270 h64 M500 278 h64" stroke="#e4c98c" stroke-width="1.5" stroke-dasharray="4 3"/><rect x="498" y="281" width="68" height="4" fill="#f4efe1"/></g>');
+  // HP Mbak Tutik (a3)
+  s+=hs('a3','HP Mbak Tutik di meja','<rect x="726" y="254" width="20" height="30" rx="3" fill="#1d2326"/><rect x="729" y="258" width="14" height="22" fill="#3fbf7f"/><rect x="731" y="262" width="10" height="3" fill="#fff"/><rect x="731" y="268" width="8" height="3" fill="#fff"/>');
+  s+='</svg>';return s;
+}
+
+/* Berkas 2: Ruang kerja LapakKampus */
+function scene2(){
+  let s='<svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ruang kerja tim LapakKampus">';
+  s+='<rect width="800" height="450" fill="#d7e2da"/><rect y="360" width="800" height="90" fill="#5d6b65"/>';
+  for(let i=0;i<10;i++)s+='<rect x="'+(i*80)+'" y="360" width="78" height="90" fill="none" stroke="#4e5b55"/>';
+  // jendela
+  s+='<rect x="568" y="56" width="200" height="160" fill="#a9d2e8"/><path d="M568 180 Q600 150 640 168 Q690 140 768 170 L768 216 L568 216Z" fill="#5d9a6c"/><rect x="562" y="50" width="212" height="172" fill="none" stroke="#f3f0e6" stroke-width="10"/><rect x="664" y="56" width="8" height="160" fill="#f3f0e6"/>';
+  // papan tulis (b6)
+  s+=hs('b6','Papan tulis ruang rapat','<rect x="34" y="52" width="232" height="160" fill="#fbfbf7" stroke="#9aa3a8" stroke-width="6"/>'+txt(150,78,'IDE Q4',16,'#2e6f62')+'<path d="M50 96 h120 M50 116 h160 M50 136 h100 M50 156 h150 M50 176 h90" stroke="#3a6fa8" stroke-width="2.5" stroke-linecap="round"/><path d="M190 128 h56 v24 h-56z" fill="#b3352b" opacity=".18"/><path d="M50 156 h150" stroke="#b3352b" stroke-width="3"/><rect x="214" y="166" width="40" height="34" fill="#f6df72" transform="rotate(6 234 183)"/>');
+  // poster fotokopi (b4)
+  s+=hs('b4','Poster iklan Fotokopi Mas Joko','<rect x="292" y="62" width="88" height="118" fill="#2f4a43"/><rect x="300" y="70" width="72" height="34" fill="#e4c98c"/>'+txt(336,85,'FOTOKOPI',10,'#2f4a43')+txt(336,98,'MAS JOKO',10,'#2f4a43')+'<rect x="304" y="112" width="64" height="40" fill="#f3f0e6"/>'+lines(310,120,52,4,8)+txt(336,170,'jilid kilat',9,'#e4c98c'));
+  // kalender rahasia (s2)
+  s+=hs('s2','Kalender kecil di dinding','<rect x="408" y="88" width="46" height="54" fill="#fff" stroke="#9aa3a8"/><rect x="408" y="88" width="46" height="12" fill="#2e6f62"/><circle cx="423" cy="116" r="7" fill="none" stroke="#b3352b" stroke-width="2"/><circle cx="440" cy="128" r="6" fill="none" stroke="#b3352b" stroke-width="2"/>',true);
+  // Bu Ratna (dekor)
+  s+=person(720,214,Object.assign({s:1.5},CAST.ratna.o));
+  s+='<rect x="696" y="320" width="48" height="40" fill="#6d2e46"/>';
+  // Bayu (b2)
+  s+=hs('b2','Bayu, pendiri LapakKampus',person(410,226,Object.assign({s:1.45},CAST.bayu.o)));
+  // meja
+  s+='<rect x="110" y="300" width="560" height="16" fill="#c9a26b"/><rect x="128" y="316" width="10" height="44" fill="#8c6b4a"/><rect x="642" y="316" width="10" height="44" fill="#8c6b4a"/>';
+  // laptop (b1)
+  s+=hs('b1','Laptop berisi laporan pendapatan','<path d="M170 300 L180 236 L292 236 L282 300Z" fill="#30373b"/><path d="M184 242 L286 242 L278 294 L176 294Z" fill="#e9f2ee"/><rect x="194" y="276" width="10" height="14" fill="#2e6f62"/><rect x="210" y="266" width="10" height="24" fill="#2e6f62"/><rect x="226" y="258" width="10" height="32" fill="#2e6f62"/><rect x="242" y="270" width="10" height="20" fill="#e4c98c"/><path d="M150 300 L300 300 L306 306 L144 306Z" fill="#4a5258"/>');
+  // HP (b3)
+  s+=hs('b3','HP dengan chat penjual','<rect x="500" y="282" width="34" height="18" rx="3" fill="#1d2326" transform="rotate(-10 517 291)"/><rect x="504" y="285" width="26" height="12" fill="#e8f4ff" transform="rotate(-10 517 291)"/>');
+  // tablet Pro (b5)
+  s+=hs('b5','Tablet dengan halaman LapakKampus Pro','<path d="M584 300 L596 300 L602 288 L578 288Z" fill="#4a5258"/><rect x="560" y="226" width="64" height="64" rx="5" fill="#1d2326"/><rect x="565" y="231" width="54" height="54" fill="#f7f1df"/>'+txt(592,255,'PRO',14,'#5a3e8e')+'<rect x="572" y="264" width="40" height="6" fill="#5a3e8e"/><rect x="572" y="274" width="30" height="4" fill="#c7bfa9"/>');
+  s+='</svg>';return s;
+}
+
+/* Berkas 3: Dua kedai es teh */
+function scene3(){
+  let s='<svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kedai A di kompleks perkantoran dan Kedai B di depan kampus">';
+  s+='<defs><linearGradient id="sky3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f2b880"/><stop offset="1" stop-color="#f7dcae"/></linearGradient></defs>';
+  s+='<rect width="800" height="450" fill="url(#sky3)"/>';
+  s+='<path d="M0 240 L120 170 L220 210 L330 150 L420 220 L560 160 L680 200 L800 150 L800 300 L0 300Z" fill="#8fa597" opacity=".55"/>';
+  // gedung kantor kiri
+  s+='<rect x="10" y="70" width="240" height="230" fill="#8d979c"/>';
+  for(let r=0;r<5;r++)for(let k=0;k<6;k++)s+='<rect x="'+(24+k*38)+'" y="'+(86+r*40)+'" width="26" height="26" fill="#c7d6de" opacity=".85"/>';
+  s+=txt(130,62,'KOMPLEKS PERKANTORAN',13,'#3b4448');
+  // gerbang kampus kanan
+  s+='<rect x="440" y="120" width="26" height="180" fill="#2f4a43"/><rect x="752" y="120" width="26" height="180" fill="#2f4a43"/><path d="M440 128 Q609 40 778 128 L778 150 Q609 66 440 150Z" fill="#2f4a43"/>'+txt(609,108,'KAMPUS',20,'#e4c98c');
+  // jalan
+  s+='<rect y="300" width="800" height="150" fill="#7b7f7c"/><rect y="296" width="800" height="10" fill="#a9aca8"/>';
+  for(let i=0;i<8;i++)s+='<rect x="'+(20+i*104)+'" y="404" width="56" height="6" fill="#efe9d8"/>';
+  s+='<rect x="396" y="150" width="6" height="160" fill="#3b4448"/><path d="M380 150 h38" stroke="#3b4448" stroke-width="6"/><circle cx="384" cy="158" r="7" fill="#f6df72"/>';
+  // Kedai A (tutup)
+  s+='<rect x="96" y="234" width="170" height="104" fill="#a07b5b"/><rect x="104" y="244" width="154" height="70" fill="#7a7f82"/>';
+  for(let i=0;i<7;i++)s+='<path d="M104 '+(252+i*9)+' h154" stroke="#5f6466" stroke-width="2"/>';
+  s+='<rect x="138" y="262" width="86" height="28" fill="#f4efe1" transform="rotate(-4 181 276)"/>'+txt(181,282,'TUTUP',16,'#b3352b');
+  s+='<rect x="96" y="214" width="170" height="22" fill="#5a3e8e"/>'+txt(181,230,'KEDAI A',14,'#f4efe1');
+  s+='<circle cx="122" cy="346" r="12" fill="#2b2b2b"/><circle cx="240" cy="346" r="12" fill="#2b2b2b"/>';
+  // papan harga (e2)
+  s+=hs('e2','Papan harga Kedai A','<rect x="270" y="236" width="56" height="70" fill="#1f2523" stroke="#a07b5b" stroke-width="4"/>'+txt(298,254,'MENU',10,'#f4efe1')+'<path d="M278 264 h40 M278 276 h40 M278 288 h40" stroke="#f4efe1" stroke-width="2"/>'+txt(298,300,'15rb',10,'#f6df72')+'<rect x="294" y="306" width="6" height="30" fill="#5c4330"/>');
+  // nota (e4) - kotak uang
+  s+=hs('e4','Nota pengeluaran di kotak uang','<rect x="196" y="318" width="44" height="18" fill="#4a5258"/><rect x="200" y="302" width="34" height="18" fill="#fffef8" transform="rotate(-8 217 311)"/>'+lines(204,307,26,2,5,'#9b9282'));
+  // tong sampah rahasia (s3)
+  s+=hs('s3','Tong sampah di sebelah kedai','<rect x="342" y="322" width="30" height="40" rx="3" fill="#3f6f5a"/><rect x="338" y="318" width="38" height="6" fill="#2f5546"/><path d="M350 318 q6 -14 14 -4" fill="none" stroke="#fffef8" stroke-width="4"/>',true);
+  // Mas Gilang (e3)
+  s+=hs('e3','Mas Gilang, pemilik Kedai A','<rect x="30" y="336" width="40" height="8" fill="#5c4330"/><rect x="36" y="344" width="6" height="22" fill="#5c4330"/><rect x="58" y="344" width="6" height="22" fill="#5c4330"/>'+person(50,272,Object.assign({s:1.05},CAST.gilang.o)));
+  // tiang info lokasi (e1)
+  s+=hs('e1','Papan petunjuk lokasi','<rect x="18" y="170" width="6" height="128" fill="#3b4448"/><rect x="0" y="176" width="64" height="40" fill="#2f6b4f"/>'+txt(32,192,'Jl. Lawu',9,'#fff')+txt(32,206,'1,2 km',9,'#f6df72'));
+  // Kedai B ramai
+  s+='<path d="M520 214 Q600 170 680 214Z" fill="#e2483a"/><path d="M540 214 Q600 186 660 214" fill="#f4efe1" opacity=".5"/><rect x="598" y="214" width="4" height="30" fill="#3b4448"/>';
+  // Mas Wahyu (e5)
+  s+=hs('e5','Mas Wahyu, penjual Kedai B',person(640,206,Object.assign({s:1.05},CAST.wahyu.o)));
+  s+='<rect x="530" y="244" width="140" height="94" fill="#2e6f62"/><rect x="530" y="244" width="140" height="20" fill="#e4c98c"/>'+txt(600,259,'KEDAI B',13,'#2e6f62');
+  s+='<rect x="542" y="272" width="24" height="40" rx="4" fill="#d9a466" opacity=".9"/><rect x="574" y="272" width="24" height="40" rx="4" fill="#d9a466" opacity=".9"/><circle cx="552" cy="346" r="12" fill="#2b2b2b"/><circle cx="650" cy="346" r="12" fill="#2b2b2b"/>';
+  // antrean
+  s+=person(490,300,{s:.95,skin:'#c58a5f',shirt:'#5f7fb5',hair:'#1b1410'});
+  s+=person(462,306,{s:.95,skin:'#a96f48',shirt:'#3fbf7f',hair:'#1b1410',cap:'#2b2b2b'});
+  s+=person(432,302,{s:.95,skin:'#d49a70',shirt:'#e9d7b4',hijab:'#5f7fb5'});
+  // Mbak Sari (e6)
+  s+=hs('e6','Mbak Sari dengan draf kanvas',person(730,290,Object.assign({s:1.05},CAST.sari.o))+'<rect x="704" y="330" width="34" height="42" fill="#f4efe1" stroke="#5c4330" stroke-width="2" transform="rotate(-8 721 351)"/><rect x="714" y="326" width="14" height="6" fill="#5c4330" transform="rotate(-8 721 351)"/>'+lines(710,340,22,4,7));
+  s+='</svg>';return s;
+}
+
+/* Berkas 4: Kantin kampus */
+function scene4(){
+  let s='<svg viewBox="0 0 800 450" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kantin kampus saat jam istirahat">';
+  s+='<rect width="800" height="450" fill="#d9e6dd"/>';
+  for(let i=0;i<20;i++)for(let r=0;r<4;r++)s+='<rect x="'+(i*40)+'" y="'+(170+r*20)+'" width="39" height="19" fill="#c4d9cc"/>';
+  s+='<rect y="360" width="800" height="90" fill="#9a8a72"/>';
+  // jam dinding
+  s+='<circle cx="400" cy="56" r="30" fill="#fff" stroke="#2f4a43" stroke-width="6"/><path d="M400 56 L414 66 M400 56 L400 32" stroke="#1f2523" stroke-width="4" stroke-linecap="round"/>'+txt(400,104,'09.45',14,'#b3352b');
+  // papan info (f6)
+  s+=hs('f6','Papan info: poster PO Kantin HIMA','<rect x="34" y="40" width="130" height="100" fill="#a9784b" stroke="#5c4330" stroke-width="5"/><rect x="46" y="50" width="66" height="78" fill="#dcf8c6"/>'+txt(79,66,'PO',14,'#1d6b3f')+txt(79,80,'KANTIN',10,'#1d6b3f')+lines(52,90,54,4,8,'#7aa38a')+'<rect x="118" y="54" width="38" height="44" fill="#f4efe1" transform="rotate(5 137 76)"/>');
+  // lapak-lapak
+  const st=[[40,'AYAM GEPREK','#b3352b'],[300,'SOTO & NASI','#2f6b8f'],[560,'ES & JUS','#2e6f62']];
+  st.forEach(t=>{s+='<rect x="'+t[0]+'" y="150" width="210" height="34" fill="'+t[2]+'"/>'+txt(t[0]+105,173,t[1],15,'#f4efe1')+'<rect x="'+t[0]+'" y="250" width="210" height="60" fill="#8c6b4a"/><rect x="'+t[0]+'" y="244" width="210" height="8" fill="#6b4a2f"/>';});
+  // Bu Narti (f5)
+  s+=hs('f5','Bu Narti, pemilik lapak soto',person(405,206,Object.assign({s:1.1},CAST.narti.o)));
+  s+='<rect x="300" y="250" width="210" height="60" fill="#8c6b4a"/><rect x="300" y="244" width="210" height="8" fill="#6b4a2f"/><ellipse cx="350" cy="242" rx="22" ry="7" fill="#c8c2b4"/><ellipse cx="460" cy="242" rx="22" ry="7" fill="#c8c2b4"/>';
+  // papan jam tutup rahasia (s4)
+  s+=hs('s4','Papan kecil di lapak es','<path d="M690 186 L700 196 L710 186" fill="none" stroke="#3b4448" stroke-width="1.5"/><rect x="684" y="196" width="34" height="22" fill="#f4efe1" stroke="#3b4448"/>'+txt(701,211,'16.00',8,'#b3352b'),true);
+  // antrean
+  for(let i=0;i<5;i++)s+=person(330+i*34,300+(i%2)*4,{s:.95,skin:['#c58a5f','#a96f48','#d49a70','#b98058','#c99068'][i],shirt:['#5f7fb5','#3fbf7f','#d36d8c','#e4c98c','#6b5a43'][i],hair:'#1b1410',hijab:i===2?'#e9d7b4':null});
+  // meja depan kiri: laptop notulen (f1) + survei (f4)
+  s+='<rect x="60" y="372" width="300" height="14" fill="#c9a26b"/><rect x="76" y="386" width="10" height="64" fill="#8c6b4a"/><rect x="334" y="386" width="10" height="64" fill="#8c6b4a"/>';
+  s+=hs('f1','Laptop tim KantinKu: notulen rapat','<path d="M100 372 L108 326 L196 326 L188 372Z" fill="#30373b"/><path d="M112 331 L192 331 L186 367 L106 367Z" fill="#f4efe1"/>'+lines(116,338,62,4,7,'#7c8a96')+'<path d="M86 372 L204 372 L210 378 L80 378Z" fill="#4a5258"/>');
+  s+=hs('f4','Lembar survei di meja','<rect x="236" y="340" width="56" height="34" fill="#fffef8" stroke="#8a8370" transform="rotate(6 264 357)"/><rect x="244" y="348" width="30" height="5" fill="#b3352b" transform="rotate(6 264 357)"/><rect x="244" y="358" width="14" height="5" fill="#2f6b4f" transform="rotate(6 264 357)"/>');
+  // meja kanan: Dimas (f2) + tablet dasbor (f3)
+  s+=hs('f2','Dimas, mahasiswa semester 1',person(600,318,Object.assign({s:1.15},CAST.dimas.o)));
+  s+='<rect x="520" y="372" width="250" height="14" fill="#c9a26b"/><rect x="536" y="386" width="10" height="64" fill="#8c6b4a"/><rect x="744" y="386" width="10" height="64" fill="#8c6b4a"/>';
+  s+=hs('f3','Tablet berisi dasbor analitik','<path d="M712 372 L724 372 L730 362 L706 362Z" fill="#4a5258"/><rect x="680" y="314" width="76" height="50" rx="4" fill="#1d2326"/><rect x="685" y="319" width="66" height="40" fill="#eaf0f4"/><path d="M690 350 L705 334 L718 346 L732 326 L746 352" fill="none" stroke="#b3352b" stroke-width="2.5"/>');
+  s+='</svg>';return s;
+}
+
+/* Ilustrasi akhir */
+function sceneEnding(kind){
+  let s='<svg viewBox="0 0 800 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustrasi akhir cerita">';
+  if(kind==='bad'){
+    s+='<rect width="800" height="320" fill="#2b2f2e"/><rect y="230" width="800" height="90" fill="#1f2322"/>';
+    s+='<path d="M0 230 L120 120 L200 170 L300 90 L420 180 L520 110 L640 170 L800 100 L800 230Z" fill="#3a3f3e"/>';
+    s+='<rect x="300" y="150" width="200" height="110" fill="#e4c98c" transform="rotate(-6 400 205)"/><path d="M320 170 h150 M320 190 h120 M320 210 h140" stroke="#8a7550" stroke-width="3" transform="rotate(-6 400 205)"/>';
+    s+='<rect x="340" y="186" width="140" height="44" fill="none" stroke="#b3352b" stroke-width="5" transform="rotate(-14 410 208)"/>'+'<text x="410" y="218" font-size="24" fill="#b3352b" text-anchor="middle" font-family="Special Elite,Courier New,monospace" transform="rotate(-14 410 208)">DITOLAK</text>';
+    s+='<path d="M120 300 q20 -40 40 0 M640 300 q20 -50 44 0" fill="#d9483b" opacity=".6"/>';
+    s+=person(620,170,Object.assign({s:1.3},CAST.wening.o,{sad:true}));
+  }else if(kind==='good'){
+    s+='<rect width="800" height="320" fill="#e9c58a"/><circle cx="640" cy="80" r="40" fill="#f6df72"/>';
+    s+='<path d="M0 230 L140 140 L240 190 L360 110 L480 190 L600 130 L800 200 L800 320 L0 320Z" fill="#7c9a83"/><rect y="250" width="800" height="70" fill="#5d7a65"/>';
+    s+='<rect x="90" y="180" width="110" height="70" fill="#f4efe1"/><rect x="90" y="170" width="110" height="14" fill="#2f4a43"/><rect x="250" y="190" width="90" height="60" fill="#f4efe1"/><rect x="250" y="180" width="90" height="12" fill="#2e6f62"/><rect x="390" y="200" width="70" height="50" fill="#f4efe1" opacity=".55"/><rect x="390" y="190" width="70" height="12" fill="#e2483a" opacity=".55"/>';
+    s+=person(560,186,Object.assign({s:1.2},CAST.det.o))+person(640,186,Object.assign({s:1.2},CAST.wening.o));
+  }else{
+    s+='<rect width="800" height="320" fill="#f3c47d"/><circle cx="400" cy="320" r="190" fill="#f6df72" opacity=".55"/>';
+    s+='<path d="M0 230 L160 120 L270 170 L400 70 L530 170 L640 120 L800 230 L800 320 L0 320Z" fill="#6f8f7a"/><rect y="250" width="800" height="70" fill="#4f6e5b"/>';
+    const pts=[[110,190],[260,150],[540,150],[690,190]];
+    s+='<path d="M110 190 L260 150 L540 150 L690 190 L110 190" fill="none" stroke="#b3352b" stroke-width="3"/>';
+    pts.forEach(p=>{s+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="34" fill="#e4c98c" stroke="#4a3a17" stroke-width="3"/>';});
+    s+=txt(110,196,'cetak',13,'#4a3a17')+txt(260,156,'lapak',13,'#4a3a17')+txt(540,156,'es teh',13,'#4a3a17')+txt(690,196,'kantin',13,'#4a3a17');
+    s+=person(400,176,Object.assign({s:1.35},CAST.det.o));
+  }
+  s+='</svg>';return s;
+}
+/* ================= DATA CERITA ================= */
+const PROLOG=[
+ {w:'nar',t:'Karanganyar, Senin pagi. Kantor kecil Biro Telisik masih bau kopi tubruk dan kertas tua.'},
+ {w:'wening',t:'Selamat datang, Detektif {nama}. Kantor kita kecil, tapi kasusnya hampir selalu besar.'},
+ {w:'wening',t:'Dinas Koperasi dan UMKM menitipkan Dana Pendampingan Digital sebesar Rp150 juta. Sebelum dana itu dibagi, mereka butuh laporan: usaha mana yang sakit, sakitnya apa, dan obatnya apa.'},
+ {w:'wening',t:'Ada empat berkas di papan. Setiap berkas adalah satu kasus, dan setiap kasus berhubungan dengan satu materi kuliah Pengantar Bisnis Digital.'},
+ {w:'wening',t:'Cara kerjanya begini. Di setiap TKP, klik benda atau orang yang bertanda lingkaran. Kamu akan membaca dokumen. Di dalam dokumen, klik kalimat yang menjawab misi.'},
+ {w:'wening',t:'Salah klik tidak apa-apa, tapi nilaimu terpotong. Kalau buntu, minta bisikan dariku. Bisikan juga ada harganya.'},
+ {w:'wening',t:'Satu lagi. Di setiap TKP biasanya ada satu benda yang tidak ditandai. Detektif yang teliti akan menemukannya, dan benda itu bisa mengubah akhir cerita.'},
+ {w:'wening',t:'Semua kesimpulanmu baru akan kunilai di akhir, di depan Kepala Dinas. Jadi jangan buru-buru. Teori yang kamu perlukan ada di Buku Saku, tombolnya di pojok kanan atas.'},
+ {w:'det',t:'Siap, Inspektur. Mulai dari berkas pertama.'}
+];
+
+const CH=[
+/* ---------------- BERKAS 1 ---------------- */
+{
+ id:'c1',no:1,title:'Mesin Cetak yang Terdiam',where:'Percetakan Sumber Jaya, Jalan Lawu',
+ materi:'Pertemuan 2: Transformasi digital dan ekosistem ekonomi digital Indonesia',
+ scene:scene1,
+ intro:[
+  {w:'nar',t:'Berkas 1. Percetakan Sumber Jaya, Jalan Lawu. Pukul 09.10. Mesin offset di sudut ruangan diam, berdebu tipis.'},
+  {w:'wening',t:'Sumber Jaya sudah berdiri 22 tahun. Sejak 2020 omzetnya turun 40%. Pak Harjo, pemiliknya, yakin penyebabnya cuma harga kertas yang naik.'},
+  {w:'wening',t:'Tugasmu: pisahkan mana yang disrupsi dan mana yang sekadar perubahan selera. Lalu nilai seberapa matang usaha ini secara digital, dan lapisan ekosistem mana yang bolong.'},
+  {w:'harjo',t:'Silakan, Detektif. Mau lihat apa saja boleh. Tapi saya yakin ini cuma soal kertas mahal. Dulu toko ini tidak pernah sepi.'},
+  {w:'wening',t:'Ingat tiga pertanyaan penguji: ada data yang pindah ke layar? Ada langkah kerja yang dikerjakan sistem? Ada blok model bisnis yang berubah?'}
+ ],
+ clues:[
+  {id:'a1',title:'Buku Order 2019 dan 2024',kind:'Buku order bersampul batik',
+   mission:'Temukan catatan yang menunjukkan ke mana pelanggan terbesar Sumber Jaya pergi.',
+   summary:'Tiga pabrik garmen, pelanggan terbesar, pindah ke percetakan daring CetakKilat.id sejak 2021. Harga kertas hanya naik sekitar 15%.',
+   body:[
+    {t:'p',u:['Buku ini ditulis tangan oleh Mbak Tutik, karyawan paling lama di Sumber Jaya.','Rekap tahunan ditulis dengan tinta merah di halaman belakang.']},
+    {t:'table',head:['Produk','2019','2024','Catatan Mbak Tutik'],rows:[
+     ['Undangan pernikahan','180 pesanan','45 pesanan','Banyak pasangan bilang “pakai undangan digital saja”'],
+     ['Kartu nama','120 kotak','20 kotak','Kantor-kantor jarang pesan lagi'],
+     ['Spanduk dan banner','210 lembar','205 lembar','Stabil, musim pilkades malah ramai'],
+     ['!Nota dan kop surat 3 pabrik garmen','96 rim','0 rim','Sejak 2021 pindah ke CetakKilat.id dari Semarang, pesan lewat web, barang dikirim ekspedisi'],
+     ['Kertas HVS (biaya beli)','Rp42.000/rim','Rp48.000/rim','Naik sekitar 15%']]},
+    {t:'p',u:['Di pinggir halaman ada coretan pensil.','!“Pabrik minta bisa kirim file jam 11 malam. Kita tutup jam 5 sore.”','Di bawahnya tertulis kecil: “sudah disampaikan ke Bapak, tidak ditanggapi.”']}
+   ]},
+  {id:'a2',title:'Wawancara Pak Harjo',kind:'Transkrip wawancara',
+   mission:'Temukan kalimat yang menunjukkan Pak Harjo terlalu mendengarkan pelanggan lamanya.',
+   summary:'Pak Harjo menolak website pemesanan pada 2019 karena pelanggan pabriknya “sudah puas telepon”. Ia juga khawatir toko jadi sepi dan masih memikirkan cicilan mesin offset sepuluh tahun.',
+   body:[
+    {t:'chat',u:[
+     ['Detektif','Pak, sejak kapan omzet mulai turun?'],
+     ['Pak Harjo','Mulai 2020, pas pandemi. Saya kira nanti balik lagi, ternyata tidak.'],
+     ['Detektif','Pernah ada yang menawarkan sistem pemesanan lewat internet?'],
+     ['Pak Harjo','!Pernah, tahun 2019 ada anak muda menawarkan website pemesanan. Saya tolak. Wong pelanggan saya bapak-bapak pabrik, mereka sudah puas telepon ke sini.'],
+     ['Pak Harjo','Lagi pula kalau semua bisa pesan dari rumah, toko ini jadi sepi. Saya eman sama karyawan.'],
+     ['Pak Harjo','Mesin offset itu saya cicil sepuluh tahun. Kalau beli yang baru, kapan balik modalnya?'],
+     ['Detektif','Siapa lagi yang menyarankan perubahan?'],
+     ['Pak Harjo','Rani, anak saya. Tapi dia masih kuliah, belum paham dunia usaha.']]}
+   ]},
+  {id:'a3',title:'HP Mbak Tutik',kind:'Tangkapan layar WhatsApp',
+   mission:'Temukan bukti tingkat perubahan digital yang sudah dilakukan Sumber Jaya.',
+   summary:'Daftar harga dipindah ke Excel sejak 2021. Pesanan tetap ditulis di buku dan sering terselip. Pelanggan luar kota tidak bisa membayar lewat transfer.',
+   body:[
+    {t:'p',u:['Grup WhatsApp “Order Sumber Jaya”, isinya pelanggan dan Mbak Tutik.']},
+    {t:'chat',u:[
+     ['Bu Endah','Mbak, undangan 300 lembar yang kemarin sudah jadi?'],
+     ['Mbak Tutik','Waduh Bu, catatan pesanannya di buku keselip. Saya cek dulu nggih.'],
+     ['Pak Bowo','Bisa transfer saja? Saya di Solo, males ke Karanganyar cuma buat bayar.'],
+     ['Mbak Tutik','Mohon maaf Pak, kebijakan Pak Harjo bayar tunai di toko.'],
+     ['Mbak Tutik (ke Pak Harjo)','!Pak, daftar harga sudah saya pindah ke Excel sejak 2021, jadi kalau ada yang tanya tinggal saya buka di laptop. Tapi pesanan tetap saya tulis di buku.'],
+     ['Pak Harjo','Ya sudah, yang penting rapi.'],
+     ['Bu Endah','Lho, kok sudah dua hari belum dikerjakan...']]}
+   ]},
+  {id:'a4',title:'Brosur CetakKilat.id',kind:'Brosur yang diselipkan di bawah pintu',
+   mission:'Temukan friksi lama yang dihapus oleh pesaing daring ini.',
+   summary:'CetakKilat menerima file 24 jam, menampilkan harga sebelum pesan, menerima QRIS dan transfer, serta melacak resi. Berdiri 2018 untuk stiker UMKM dan tugas mahasiswa, membuka layanan korporat sejak 2021.',
+   body:[
+    {t:'p',u:['CetakKilat.id, cetak apa saja dari mana saja.']},
+    {t:'list',u:['!Unggah file 24 jam, termasuk hari libur.','!Harga langsung tampil sebelum pesan. Tidak perlu datang ke toko untuk tanya harga.','Bayar lewat QRIS, transfer, atau e-wallet.','Lacak status cetak dan nomor resi dari HP.','Gratis ongkir untuk pesanan di atas Rp500.000 ke seluruh Jawa Tengah.','Nilai 4,8 dari 12.000 ulasan pembeli.']},
+    {t:'p',u:['Di bagian belakang brosur:','Berdiri 2018, awalnya hanya melayani stiker UMKM dan cetak tugas mahasiswa.','Sejak 2021 membuka layanan korporat: nota, kop surat, dan kemasan.']}
+   ]},
+  {id:'a5',title:'Undangan Digital Dewi dan Arif',kind:'HP pelanggan di bangku tunggu',
+   mission:'Temukan alasan sebenarnya pasangan ini tidak mencetak banyak undangan.',
+   summary:'Kata Dewi, alasannya bukan harga: teman-temannya sudah biasa kirim undangan lewat WA. Ia tetap mencetak 50 lembar untuk orang tua dan mau memesan undangan digital kalau ada contohnya.',
+   body:[
+    {t:'list',u:['Undangan web dari template gratis, tinggal isi nama dan lokasi.','Tamu bisa konfirmasi hadir lewat WhatsApp.','Ada peta lokasi dan amplop digital.']},
+    {t:'chat',u:[
+     ['Detektif','Mbak Dewi, kenapa tidak cetak undangan di Sumber Jaya?'],
+     ['Dewi','!Bukan karena percetakannya mahal, Pak. Teman-teman kami memang sudah biasa kirim undangan lewat WA. Kami cetak 50 lembar saja untuk simbah-simbah.'],
+     ['Dewi','Kartu nama? Suami saya pakai QR profil LinkedIn.'],
+     ['Dewi','Kalau Sumber Jaya bisa bikin undangan digital juga, saya mau kok, asal ada contohnya.']]}
+   ]},
+  {id:'a6',title:'Papan Pengumuman Toko',kind:'Papan gabus di dinding',
+   mission:'Temukan aturan toko yang membuat pelanggan luar kota tidak bisa bertransaksi.',
+   summary:'Toko hanya menerima pembayaran tunai dan tidak melayani pengiriman. Jam buka 08.00 sampai 17.00. Ada kliping data e-Conomy SEA 2025 yang ditempel Rani.',
+   body:[
+    {t:'list',u:['Jam buka Senin sampai Sabtu, 08.00 sampai 17.00.','!Pembayaran HANYA TUNAI. Tidak melayani transfer.','!Barang diambil sendiri di toko. Tidak melayani pengiriman.','Melayani undangan, kartu nama, nota, spanduk, dan kalender.']},
+    {t:'p',u:['Ada kliping majalah kampus yang ditempel Rani.','Isinya: ekonomi digital Indonesia diproyeksikan sekitar US$100 miliar GMV pada 2025, dengan e-commerce sekitar US$71 miliar (e-Conomy SEA 2025).','Rani menulis dengan spidol: “Pak, pasarnya di sini!”']}
+   ]}
+ ],
+ secret:{id:'s1',title:'Map Biru di Laci: Proposal Rani',kind:'Bukti rahasia',
+  summary:'Rani pernah mengusulkan “Sumber Jaya Kemasan”: cetak label dan kemasan untuk UMKM keripik, pesan lewat formulir daring, kirim ekspedisi, uji coba dua minggu. Ini jalan transformasi yang pernah ditolak.',
+  body:[
+   {t:'p',u:['Proposal Usaha, ditulis Rani, Oktober 2021.','Judul: Sumber Jaya Kemasan.']},
+   {t:'list',u:['Masalah: pesanan korporat hilang, tapi UMKM keripik di Karanganyar butuh label dan kemasan cetak dalam jumlah kecil.','Tujuan: 20 UMKM pelanggan tetap dalam 3 bulan.','Teknologi: formulir pesanan daring dan spreadsheet otomatis, belum perlu aplikasi khusus.','Uji coba: 2 minggu dengan 10 UMKM dulu, baru diperluas.','Pembayaran QRIS, pengiriman lewat ekspedisi lokal.']},
+   {t:'p',u:['Di sampul ada tulisan tangan Pak Harjo: “Nanti dulu.”']}
+  ]},
+ qs:[
+  {id:'q1a',q:'Daftar harga yang dipindah dari buku ke Excel sejak 2021 termasuk tingkat perubahan apa?',
+   opts:[{t:'Digitization: hanya format datanya yang berubah',p:10},{t:'Digitalization: alur kerjanya sudah dijalankan sistem',p:3},{t:'Digital transformation: model bisnisnya berubah',p:0},{t:'Belum termasuk perubahan digital apa pun',p:2}],
+   exp:'Data pindah dari kertas ke layar, lalu berhenti di situ. Pesanan tetap ditulis tangan dan tidak ada langkah kerja yang diambil alih sistem. Itu digitization.',ref:'P2: Tiga tingkat perubahan digital'},
+  {id:'q2a',q:'Dari semua penyebab yang kamu temukan, mana yang termasuk disrupsi digital?',
+   opts:[{t:'Undangan digital yang membuat pesanan undangan cetak turun',p:4},{t:'Harga kertas HVS yang naik sekitar 15%',p:0},{t:'Pelanggan korporat pindah ke percetakan daring yang melayani kebutuhan cetak yang sama dengan pengalaman yang jauh berbeda',p:10},{t:'Semuanya disrupsi, karena sama-sama membuat omzet turun',p:2}],
+   exp:'Disrupsi terjadi saat pendatang melayani kebutuhan yang sama dengan struktur biaya dan pengalaman berbeda. CetakKilat tetap menjual jasa cetak, hanya caranya lain. Undangan digital lebih tepat disebut perubahan selera: kebutuhan cetaknya sendiri yang menyusut.',ref:'P2: Disrupsi digital'},
+  {id:'q3a',q:'Alasan paling kuat kenapa Pak Harjo terlambat merespons adalah...',
+   opts:[{t:'Teknologi digital terlalu mahal untuk percetakan kecil',p:0},{t:'Jebakan pelanggan terbaik: ia mendengarkan pelanggan lama yang “sudah puas telepon”, sementara sinyal perubahan tidak didengar',p:10},{t:'Takut kanibalisasi: kanal online dianggap akan membuat toko sepi',p:7},{t:'Kecepatan keputusan: rantai persetujuannya terlalu panjang',p:2}],
+   exp:'Ketiganya muncul di wawancara, tapi alasan pertama dan paling menentukan adalah jebakan pelanggan terbaik. Kanibalisasi juga ada, jadi tetap dapat poin. “Teknologi mahal” adalah salah kaprah: CetakKilat sendiri hanya memakai web dan ekspedisi.',ref:'P2: Kenapa pemain lama sering terlambat'},
+  {id:'q4a',q:'CetakKilat awalnya hanya melayani stiker UMKM dan tugas mahasiswa, lalu naik ke pelanggan korporat. Ini cocok dengan langkah anatomi disrupsi yang mana?',
+   opts:[{t:'Langkah 1: ada friksi yang dianggap wajar',p:3},{t:'Langkah 3: pendatang masuk dari segmen yang diabaikan pemain besar',p:10},{t:'Langkah 5: pemain lama merespons saat pasar sudah pindah',p:2},{t:'Bukan disrupsi, hanya strategi promosi',p:0}],
+   exp:'Pendatang disruptif biasanya masuk dari segmen kecil yang dianggap tidak menarik, lalu naik kelas sampai merebut pasar utama. Itu pola CetakKilat dari 2018 ke 2021.',ref:'P2: Anatomi disrupsi'},
+  {id:'q5a',q:'Di level kematangan digital berapa Sumber Jaya saat ini?',
+   opts:[{t:'Level 0: belum digital',p:4},{t:'Level 1: hadir digital, ada WhatsApp tapi transaksi masih manual',p:10},{t:'Level 2: transaksi digital',p:3},{t:'Level 3: operasi digital',p:0}],
+   exp:'Ada grup WhatsApp dan Excel, jadi bukan level 0. Tapi pesanan dan pembayaran masih manual dan tunai, jadi belum level 2.',ref:'P2: Level kematangan digital'},
+  {id:'q6a',q:'Lapisan ekosistem ekonomi digital mana yang paling bolong di Sumber Jaya?',
+   opts:[{t:'Infrastruktur: internet dan pusat data',p:2},{t:'Regulator dan pendukung',p:0},{t:'Enabler: pembayaran non-tunai dan logistik',p:10},{t:'Pengguna: tidak ada lagi yang butuh cetak',p:1}],
+   exp:'Pelanggan luar kota mau bertransaksi tapi tidak bisa transfer dan tidak ada pengiriman. Cabut lapisan pembayaran dan logistik, transaksi tidak terjadi.',ref:'P2: Lima lapisan ekosistem'},
+  {id:'q7a',q:'Kalau Sumber Jaya mau mulai bertransformasi, langkah pertama yang paling tepat adalah...',
+   opts:[{t:'Membeli mesin cetak digital Rp400 juta dan aplikasi khusus',p:0},{t:'Membuat akun TikTok dan rajin posting',p:3},{t:'Menutup toko fisik dan pindah jadi percetakan online sepenuhnya',p:3},{t:'Menetapkan masalah dan tujuan terukur, misalnya “kembalikan 2 pelanggan korporat dalam 3 bulan lewat pesanan file daring dan QRIS”, lalu uji coba skala kecil',p:10}],
+   exp:'Enam tahap transformasi dimulai dari masalah dan tujuan terukur. Tanpa tujuan, tahap mengukur dan memperbaiki tidak bisa dikerjakan. Beli alat mahal dan “punya TikTok” adalah salah kaprah.',ref:'P2: Enam tahap transformasi digital'}
+ ],
+ ded:{q:'Kesimpulan berkas: apa penyebab utama omzet Sumber Jaya turun 40%?',
+  opts:[{t:'Harga kertas naik, jadi untungnya tergerus',p:0},{t:'Disrupsi: pendatang daring menghapus friksi pemesanan dan merebut pelanggan korporat, sementara Sumber Jaya menutup diri dari kanal dan pembayaran digital',p:10},{t:'Generasi muda tidak lagi suka barang cetak',p:3}],
+  ev:['a1','a4','a2','a6'],
+  exp:'Pelanggan terbesar pergi ke CetakKilat (buku order), karena CetakKilat menghapus friksi (brosur), sementara Pak Harjo menolak berubah (wawancara) dan toko tidak menerima transfer atau pengiriman (papan pengumuman).'},
+ outro:[
+  {w:'harjo',t:'Jadi bukan kertas, ya... Pelanggan saya pindah karena di sana lebih gampang.'},
+  {w:'wening',t:'Kesimpulanmu sudah kucatat, Detektif. Jangan tanya benar atau salah dulu. Berkas berikutnya menunggu.'}
+ ],
+ out:{hi:'Sumber Jaya membuka formulir pesanan daring, menerima QRIS, dan bekerja sama dengan ekspedisi lokal. Dua pabrik garmen kembali memesan nota.',
+      mid:'Sumber Jaya mulai menerima transfer, tapi pesanan tetap ditulis tangan. Omzet berhenti turun, belum naik.',
+      lo:'Pak Harjo meminjam uang untuk mesin baru. Pelanggan tetap tidak kembali, dan mesin offset dilelang awal 2027.',
+      sec:'Proposal Rani akhirnya dijalankan. Sumber Jaya Kemasan kini mencetak label untuk puluhan UMKM keripik.'}
+},
+/* ---------------- BERKAS 2 ---------------- */
+{
+ id:'c2',no:2,title:'Gratis, Tapi Kok Untung?',where:'Ruang kerja tim LapakKampus, dekat kampus',
+ materi:'Pertemuan 3: Model bisnis digital',
+ scene:scene2,
+ intro:[
+  {w:'nar',t:'Berkas 2. Ruang kerja sempit di lantai dua ruko dekat kampus. Empat laptop, satu dispenser, dan papan tulis penuh coretan.'},
+  {w:'wening',t:'Berkas ini lebih rapi, tapi lebih licin. LapakKampus adalah aplikasi jual beli buku bekas antarmahasiswa. Pembelinya tidak membayar sepeser pun.'},
+  {w:'ratna',t:'Saya mau menanam modal Rp50 juta. Tapi laporan mereka bilang pendapatannya Rp18 juta sebulan. Aplikasi gratis kok bisa? Jangan-jangan angkanya dikarang.'},
+  {w:'bayu',t:'Silakan diperiksa, Bu. Kami tidak menyembunyikan apa-apa.'},
+  {w:'wening',t:'Ikuti uangnya, Detektif. Siapa yang mengeluarkan uang, dan untuk apa. Pakai Jurus 3 Pertanyaan: siapa jual ke siapa, apa yang dijual, dan uangnya dari mana.'}
+ ],
+ clues:[
+  {id:'b1',title:'Laporan Pendapatan September',kind:'File di laptop',
+   mission:'Temukan sumber pendapatan terbesar LapakKampus.',
+   summary:'Pendapatan Rp18 juta berasal dari lima keran: biaya admin penjual (terbesar, Rp6,2 juta), langganan Pro dari UMKM, banner iklan, fitur Naikkan Lapak, dan komisi tautan afiliasi. Pembeli tidak membayar apa pun.',
+   body:[
+    {t:'p',u:['Laporan Pendapatan LapakKampus, September 2026.']},
+    {t:'table',head:['Sumber','Volume','Pendapatan'],rows:[
+     ['!Biaya admin penjual, Rp2.000 per transaksi berhasil','3.100 transaksi','Rp6.200.000'],
+     ['LapakKampus Pro untuk UMKM sekitar kampus, Rp49.000/bulan','90 pelanggan','Rp4.410.000'],
+     ['Banner iklan di halaman depan','7 pengiklan','Rp3.500.000'],
+     ['Fitur “Naikkan Lapak”, Rp5.000 per 3 hari','420 kali','Rp2.100.000'],
+     ['Komisi tautan “Beli Baru di Shopee”','-','Rp1.790.000'],
+     ['Total','','Rp18.000.000']]},
+    {t:'p',u:['Catatan kaki: pembeli tidak dikenai biaya apa pun.','Biaya server dan gaji tim dibahas di laporan terpisah.']}
+   ]},
+  {id:'b2',title:'Wawancara Bayu',kind:'Transkrip wawancara',
+   mission:'Temukan kalimat yang membuktikan LapakKampus bukan toko online milik sendiri.',
+   summary:'Bayu tidak memegang stok buku. Kakak tingkat memasang foto, adik tingkat membeli, lalu bertemu COD. Penjual membayar Rp2.000 hanya bila bukunya laku.',
+   body:[
+    {t:'chat',u:[
+     ['Bayu','Awalnya saya cuma kesal. Buku Akuntansi Dasar baru harganya Rp180 ribu, padahal kakak tingkat punya numpuk.'],
+     ['Bayu','!Kami tidak pegang stok satu buku pun. Kakak tingkat pasang foto, adik tingkat beli, ketemuan COD di kampus.'],
+     ['Bayu','Penjual baru bayar Rp2.000 kalau bukunya laku. Kalau tidak laku, gratis.'],
+     ['Bayu','Tim kami cuma empat orang: dua programmer, satu desainer, dan saya.'],
+     ['Bayu','Investor sebelumnya bilang kami harusnya beli stok buku sendiri biar untung lebih besar. Saya tidak setuju, nanti gudangnya di mana?']]}
+   ]},
+  {id:'b3',title:'Chat Penjual dan Pembeli',kind:'Tangkapan layar aplikasi',
+   mission:'Temukan bukti siapa penjual dan siapa pembelinya.',
+   summary:'Nadia, mahasiswa semester 5, menjual buku pribadinya ke Rizky, mahasiswa baru. Biaya admin Rp2.000 dipotong dari saldo penjual.',
+   body:[
+    {t:'chat',u:[
+     ['Nadia','Halo dek, buku Pengantar Bisnis masih ada, Rp45 ribu ya.'],
+     ['Rizky','Kak, aku maba. Bisa COD di depan perpus?'],
+     ['Nadia','!Bisa. Aku mahasiswa semester 5, ini buku pribadiku, sudah tidak kepakai.'],
+     ['Sistem','Transaksi berhasil. Biaya admin Rp2.000 dipotong dari saldo penjual.'],
+     ['Nadia','Lumayan dek, daripada jadi ganjel pintu.']]}
+   ]},
+  {id:'b4',title:'Kontrak Iklan Fotokopi Mas Joko',kind:'Dokumen kontrak',
+   mission:'Temukan apa sebenarnya yang dibeli Mas Joko dari LapakKampus.',
+   summary:'Mas Joko membayar Rp500.000 per bulan agar banner fotokopinya tampil di halaman depan dan dilihat sekitar 2.500 mahasiswa aktif per minggu. Pesanan jilidnya naik.',
+   body:[
+    {t:'list',u:['Pihak pertama: LapakKampus.','Pihak kedua: Fotokopi dan Print Mas Joko.','Durasi kerja sama satu bulan, nilai Rp500.000, dibayar di muka.','!Yang diberikan: banner tampil di halaman depan aplikasi dan dilihat sekitar 2.500 mahasiswa aktif per minggu.','Banner boleh diganti dua kali selama masa kontrak.']},
+    {t:'p',u:['Catatan tangan Mas Joko di bawah tanda tangan:','“Sejak pasang banner, pesanan jilid skripsi naik.”']}
+   ]},
+  {id:'b5',title:'Halaman Paket LapakKampus Pro',kind:'Tampilan di tablet',
+   mission:'Temukan cara LapakKampus Pro menarik UMKM untuk mencoba.',
+   summary:'Paket untuk warung dan fotokopi: versi gratis dibatasi 20 transaksi per hari, versi Pro Rp49.000 per bulan dengan fitur penuh. Data di cloud dan pembaruan otomatis.',
+   body:[
+    {t:'list',u:['Untuk warung, fotokopi, dan kedai di sekitar kampus.','!Versi gratis: catat 20 transaksi per hari dan katalog 10 produk.','Versi Pro Rp49.000 per bulan: transaksi tanpa batas, laporan stok, pengingat utang lewat WA.','Data tersimpan di cloud, bisa dibuka dari HP mana saja.','Pembaruan fitur otomatis, tidak perlu pasang ulang.']},
+    {t:'p',u:['Testimoni Bu Siti, pemilik warung:','“Dulu utang pelanggan saya catat di buku tulis, sering lupa siapa yang belum bayar.”']}
+   ]},
+  {id:'b6',title:'Papan Tulis Ruang Rapat',kind:'Foto papan tulis',
+   mission:'Temukan rencana yang berisiko bagi pengguna.',
+   summary:'Di papan tulis ada ide menjual “paket data pengguna” (nama, nomor WA, jurusan) ke pengiklan seharga Rp3 juta per paket. Bayu sendiri menulis bahwa ia belum yakin.',
+   body:[
+    {t:'list',u:['Target kuartal empat: 5.000 pengguna aktif.','Ide: LapakKampus Wisuda, sewa kebaya dan jas dari alumni.','!Ide: jual “paket data pengguna” berisi nama, nomor WA, dan jurusan ke pengiklan, Rp3 juta per paket.','Ide: kerja sama toko buku untuk tautan afiliasi buku baru.']},
+    {t:'p',u:['Ada sticky note kuning tulisan Bayu:','“Bahas dulu sama tim, aku belum yakin.”']}
+   ]}
+ ],
+ secret:{id:'s2',title:'Kalender Kecil di Dinding',kind:'Bukti rahasia',
+  summary:'Sekitar 70% transaksi buku terjadi di tiga minggu awal semester. Juli dan Desember sepi. Pendapatan dari transaksi sangat musiman, sedangkan langganan Pro mengalir tiap bulan.',
+  body:[
+   {t:'p',u:['Kalender meja yang dilingkari spidol merah.','Tulisan di pojok: “70% transaksi terjadi di 3 minggu awal semester.”','“Juli dan Desember sepi, gaji tim tetap jalan.”','“Pelanggan Pro tetap bayar walau libur.”']}
+  ]},
+ qs:[
+  {id:'q1b',q:'LapakKampus termasuk e-commerce atau marketplace?',
+   opts:[{t:'E-commerce, karena jual beli terjadi lewat aplikasi',p:0},{t:'Marketplace, karena barangnya milik penjual lain dan platform tidak menyimpan stok',p:10},{t:'Keduanya sama saja',p:2},{t:'Subscription, karena penggunanya rutin membuka aplikasi',p:0}],
+   exp:'Bedanya sederhana: pemilik barang atau pemilik tempat. LapakKampus pemilik tempat, seperti pengelola pasar malam.',ref:'P3: E-commerce vs marketplace'},
+  {id:'q2b',q:'Transaksi buku antara Nadia dan Rizky termasuk arah transaksi apa?',
+   opts:[{t:'B2C',p:2},{t:'B2B',p:0},{t:'C2C',p:10},{t:'D2C',p:0}],
+   exp:'Penjualnya orang biasa (mahasiswa menjual buku pribadi), pembelinya juga orang biasa. Platform hanya di tengah.',ref:'P3: B2C, B2B, C2C, D2C'},
+  {id:'q3b',q:'Dalam kontrak banner Mas Joko, siapa yang membayar dan untuk apa?',
+   opts:[{t:'Mahasiswa membayar untuk melihat promo fotokopi',p:0},{t:'Mas Joko membayar komisi setiap mahasiswa memfotokopi',p:3},{t:'Pengiklan membayar untuk perhatian pengguna. Model iklan, arah B2B',p:10},{t:'Mas Joko menyewa software, jadi SaaS',p:0}],
+   exp:'Kalimat kuncinya: kalau kamu tidak membayar produknya, bisa jadi perhatianmu yang sedang dijual. Mas Joko membayar tayangan banner, bukan per penjualan.',ref:'P3: Model iklan'},
+  {id:'q4b',q:'LapakKampus Pro paling tepat digolongkan sebagai model apa?',
+   opts:[{t:'Marketplace B2C',p:0},{t:'SaaS untuk UMKM (B2B) dengan pintu masuk freemium',p:10},{t:'Subscription B2C seperti Netflix',p:4},{t:'Afiliasi',p:0}],
+   exp:'Software di cloud yang disewa bulanan oleh usaha adalah SaaS, dan kebanyakan SaaS itu B2B. Versi gratis 20 transaksi per hari adalah pintu freemium agar warung kecil mau mencoba.',ref:'P3: SaaS dan freemium'},
+  {id:'q5b',q:'Bagaimana kamu merespons ide menjual “paket data pengguna” ke pengiklan?',
+   opts:[{t:'Boleh, aplikasinya gratis jadi wajar pengguna membayar dengan data',p:0},{t:'Boleh asal harganya tinggi, misalnya Rp10 juta per paket',p:0},{t:'Tolak. Data pribadi butuh persetujuan pemiliknya dan dilindungi UU PDP. Kepercayaan adalah aset utama marketplace',p:10},{t:'Ganti dengan iklan bertarget di dalam aplikasi tanpa menyerahkan data mentah, dengan izin pengguna',p:8}],
+   exp:'Model iklan menjual perhatian, bukan menyerahkan data mentah. Menjual nomor WA tanpa izin melanggar hukum dan menghancurkan kepercayaan, padahal ulasan dan rasa aman adalah pengganti “kenal penjualnya” di marketplace. Opsi iklan bertarget dengan izin masih bisa dipertanggungjawabkan.',ref:'P2: Isu terkini · P3: Model iklan'},
+  {id:'q6b',q:'Saat libur semester transaksi buku anjlok. Keran pendapatan mana yang paling tahan?',
+   opts:[{t:'Biaya admin per transaksi',p:2},{t:'Langganan LapakKampus Pro dari UMKM',p:10},{t:'Fitur Naikkan Lapak',p:2},{t:'Komisi tautan afiliasi',p:4}],
+   exp:'Warung dan fotokopi tetap berjualan walau mahasiswa libur, jadi langganan Pro tetap dibayar. Itulah kekuatan pendapatan berulang. Bukti rahasia di kalender memperkuat ini.',ref:'P3: Satu aplikasi, banyak model'}
+ ],
+ ded:{q:'Kesimpulan untuk Bu Ratna: apakah pendapatan Rp18 juta per bulan itu masuk akal?',
+  opts:[{t:'Tidak masuk akal. Aplikasi yang gratis tidak mungkin punya pendapatan',p:0},{t:'Masuk akal, karena pembeli diam-diam membayar biaya aplikasi',p:2},{t:'Masuk akal. Pembeli memang gratis, tapi uang datang dari penjual (komisi), pengiklan, UMKM pelanggan Pro, dan komisi afiliasi',p:10}],
+  ev:['b1','b4','b5','b3'],
+  exp:'Laporan pendapatan, kontrak iklan, halaman Pro, dan chat penjual menunjukkan siapa saja yang mengeluarkan uang. “Gratis” bukan berarti tanpa bisnis.'},
+ outro:[
+  {w:'ratna',t:'Jadi gratis untuk pembeli, tapi ada lima keran yang mengalir. Saya paham sekarang.'},
+  {w:'bayu',t:'Soal papan tulis itu... saya juga belum yakin. Terima kasih sudah ditanyakan.'},
+  {w:'wening',t:'Dicatat. Berkas ketiga: dua kedai es teh dengan nasib berbeda.'}
+ ],
+ out:{hi:'Bu Ratna jadi berinvestasi. LapakKampus memperkuat paket Pro untuk UMKM agar tetap hidup saat libur semester.',
+      mid:'Investasi masuk separuh. Tim masih bergantung pada keramaian awal semester dan kewalahan saat libur.',
+      lo:'Bu Ratna menarik diri karena laporan detektif menyebut pendapatan aplikasi gratis tidak masuk akal. Tim kehabisan modal.',
+      bad_eth:'Paket data pengguna terlanjur dijual. Nomor WA mahasiswa bocor ke grup penipuan, LapakKampus viral karena alasan yang salah.',
+      sec:'Melihat pola musiman, tim menjadwalkan promosi Pro ke UMKM tepat saat libur semester.'}
+},
+/* ---------------- BERKAS 3 ---------------- */
+{
+ id:'c3',no:3,title:'Autopsi Kedai Es Teh',where:'Kompleks perkantoran Jalan Lawu dan gerbang kampus',
+ materi:'Pertemuan 4: Business Model Canvas',
+ scene:scene3,
+ intro:[
+  {w:'nar',t:'Berkas 3. Sore hari. Di kompleks perkantoran, gerobak Kedai A tertutup rapat. Satu kilometer dari situ, Kedai B di depan gerbang kampus dikerubungi pembeli.'},
+  {w:'sari',t:'Detektif, saya mau buka kedai es teh di depan kampus. Modalnya tabungan tiga tahun. Saya takut bernasib seperti Kedai A milik Mas Gilang.'},
+  {w:'sari',t:'Padahal es teh Mas Gilang enak lho. Kok bisa tutup dalam tiga bulan? Saya juga sudah bikin draf kanvas, tolong dicek.'},
+  {w:'wening',t:'Kita lakukan autopsi model bisnis. Bandingkan Kedai A yang tutup dengan Kedai B yang ramai, pakai sembilan kotak Business Model Canvas.'},
+  {w:'wening',t:'Ingat: isi dari kanan dulu, dari pelanggan. Dan kanvas yang baik bisa dibaca seperti cerita. Kalau ada kotak yang tidak nyambung, di situlah penyakitnya.'}
+ ],
+ clues:[
+  {id:'e1',title:'Catatan Lokasi Kedai A',kind:'Catatan pengamatan',
+   mission:'Temukan kenapa lokasi Kedai A bermasalah bagi pembeli yang ia incar.',
+   summary:'Kedai A di kompleks perkantoran 1,2 km dari kampus, ramai hanya jam makan siang hari kerja dan kosong saat akhir pekan. Target yang ditulis Mas Gilang: anak kos dan mahasiswa.',
+   body:[
+    {t:'list',u:['Kedai A berada di kompleks perkantoran Jalan Lawu, 1,2 km dari gerbang kampus.','Senin sampai Jumat pukul 12.00 sampai 13.00 ramai karyawan.','!Sabtu dan Minggu kompleks kosong. Kata satpam, “yang lewat cuma kucing.”','!Di proposal awalnya Mas Gilang menulis: “Target: anak kos dan mahasiswa.”','Sewa tempat di kompleks ini termasuk yang paling mahal di kecamatan.']}
+   ]},
+  {id:'e2',title:'Papan Harga Kedai A',kind:'Foto papan menu',
+   mission:'Temukan janji atau harga yang tidak cocok dengan segmen yang diincar.',
+   summary:'Es teh Rp15.000 untuk gelas 350 ml dengan tagline “teh premium untuk kaum urban”. Kedai lain di dekat kampus Rp5.000 sampai Rp8.000 untuk gelas 700 ml.',
+   body:[
+    {t:'table',head:['Menu','Harga'],rows:[
+     ['!Es teh original','Rp15.000'],['Es teh susu','Rp18.000'],['Es teh lemon','Rp17.000'],['Topping boba','+Rp5.000']]},
+    {t:'list',u:['!Tagline di spanduk: “Teh premium untuk kaum urban.”','Ukuran gelas 350 ml.','Kedai lain di dekat kampus: Rp5.000 sampai Rp8.000 untuk gelas 700 ml.']}
+   ]},
+  {id:'e3',title:'Wawancara Mas Gilang',kind:'Transkrip wawancara',
+   mission:'Temukan kotak BMC yang ia abaikan soal saluran pembelian.',
+   summary:'Mas Gilang hanya berjualan di tempat, tidak menerima pesanan online, berpromosi lewat spanduk, dan tidak memakai kartu stempel. Pelanggan tetapnya karyawan bank yang libur di akhir pekan.',
+   body:[
+    {t:'chat',u:[
+     ['Mas Gilang','Saya fokus ke rasa. Teh saya racik sendiri dari tiga jenis daun.'],
+     ['Mas Gilang','!Pesanan online? Tidak sempat ngurus. Saya cuma jualan di tempat.'],
+     ['Mas Gilang','Promosi? Saya pasang spanduk besar di depan kedai.'],
+     ['Mas Gilang','Pelanggan tetap ada sih, karyawan bank. Tapi Sabtu Minggu mereka libur.'],
+     ['Mas Gilang','Kartu stempel? Ribet, saya tidak pakai.']]}
+   ]},
+  {id:'e4',title:'Nota Pengeluaran Kedai A',kind:'Nota di kotak uang',
+   mission:'Temukan biaya yang membengkak karena tidak punya mitra yang tepat.',
+   summary:'Biaya Rp9,75 juta per bulan, pendapatan Rp6,9 juta, rugi sekitar Rp2,85 juta. Es batu dibeli eceran dari warung, Rp1,5 juta per bulan.',
+   body:[
+    {t:'table',head:['Pos','Per bulan'],rows:[
+     ['Sewa tempat','Rp4.000.000'],['Gaji 1 karyawan','Rp1.800.000'],['Teh, gula, susu','Rp2.100.000'],
+     ['!Es batu eceran dari warung, Rp2.000 per plastik × 25 per hari','Rp1.500.000'],['Spanduk','Rp350.000']]},
+    {t:'p',u:['Total biaya Rp9.750.000.','Pendapatan rata-rata Rp6.900.000.','Rugi sekitar Rp2.850.000 setiap bulan.']}
+   ]},
+  {id:'e5',title:'Obrolan dengan Mas Wahyu (Kedai B)',kind:'Catatan wawancara',
+   mission:'Temukan cara Kedai B menekan biaya bahan.',
+   summary:'Pembeli Kedai B 80% anak kos dan driver ojol. Gelas jumbo Rp6.000, es batu diambil langsung dari pabrik dengan harga borongan, pesanan lewat WA dan GoFood, ada kartu stempel.',
+   body:[
+    {t:'chat',u:[
+     ['Mas Wahyu','Pembeli saya 80% anak kos sama driver ojol yang mangkal di sini.'],
+     ['Mas Wahyu','Gelas jumbo 700 ml, Rp6.000. Akhir bulan ada paket hemat.'],
+     ['Mas Wahyu','!Es batu saya ambil langsung dari pabrik es, kerja sama harga borongan. Jadi separuh harga eceran.'],
+     ['Mas Wahyu','Bisa pesan lewat WA atau GoFood, tinggal ambil.'],
+     ['Mas Wahyu','Kartu stempel beli 10 gratis 1. Anak kos suka banget.']]}
+   ]},
+  {id:'e6',title:'Draf Kanvas Mbak Sari',kind:'Business Model Canvas, tulisan tangan',
+   mission:'Temukan baris yang tidak sanggup menepati janji di kotak Value Propositions.',
+   summary:'Kotak 2 menjanjikan buka sampai jam 10 malam. Kotak 7 menulis jam buka 10.00 sampai 15.00. Kotak 9 hanya berisi sewa lapak, bahan baku, dan cup.',
+   body:[
+    {t:'table',head:['Kotak','Isi'],rows:[
+     ['1 Customer Segments','Mahasiswa dan anak kos sekitar kampus, driver ojol'],
+     ['2 Value Propositions','Es teh jumbo harga anak kos, buka sampai jam 10 malam, pesan lewat WA tanpa antre'],
+     ['3 Channels','Gerobak depan gerbang kampus, GoFood, grup WA kos, TikTok'],
+     ['4 Customer Relationships','Kartu stempel beli 10 gratis 1, balas chat cepat'],
+     ['5 Revenue Streams','Jual per gelas, paket langganan mingguan'],
+     ['6 Key Resources','Resep teh, gerobak dan freezer, 1 karyawan'],
+     ['!7 Key Activities','Belanja bahan pagi, meracik, buka jam 10.00 sampai 15.00'],
+     ['8 Key Partners','Pemasok teh dan gula, GoFood'],
+     ['9 Cost Structure','Sewa lapak, bahan baku, cup']]}
+   ]}
+ ],
+ secret:{id:'s3',title:'Gulungan Struk di Tong Sampah',kind:'Bukti rahasia',
+  summary:'Laporan kasir Kedai A menunjukkan transaksi terbanyak justru pukul 20.00–22.00, dari driver ojol di pom bensin sebelah. Segmen ini tidak pernah dilayani dengan sengaja.',
+  body:[
+   {t:'p',u:['Struk laporan kasir bulan Agustus, digulung dan dibuang.','Jam tersibuk: 20.00 sampai 22.00.','Pembeli terbanyak di jam itu driver ojol yang menunggu order di pom bensin sebelah.','Mas Gilang tutup jam 21.00, jadi separuh jam ramai itu terlewat.','Di balik struk tertulis: “nggak sempat baca laporan.”']}
+  ]},
+ mg:{title:'Tebak Kotak: jastip “Laper Malem”',
+  intro:'Sebelum menyimpulkan, uji dulu ketajamanmu. Teman kos membuka jasa titip makanan malam. Tentukan nomor kotak BMC untuk setiap pernyataan.',
+  items:[
+   {t:'Anak kos yang lapar di atas jam 10 malam',a:1},
+   {t:'Makanan warung favoritmu diantar sampai depan kos, bahkan tengah malam',a:2},
+   {t:'Pesan lewat grup WA kos dan akun Instagram',a:3},
+   {t:'Order 10 kali dapat gratis ongkir sekali',a:4},
+   {t:'Ongkos titip per pesanan',a:5},
+   {t:'Merekap pesanan dan mengantar tepat waktu',a:7},
+   {t:'Warung-warung yang buka sampai malam',a:8},
+   {t:'Bensin, kuota, dan uang lelah teman yang ikut mengantar',a:9}
+  ]},
+ qs:[
+  {id:'q1c',q:'Saat mengautopsi model bisnis Kedai A dengan BMC, kotak mana yang sebaiknya kamu periksa pertama?',
+   opts:[{t:'Kotak 8 Key Partners, karena mitra paling menentukan',p:0},{t:'Kotak 9 Cost Structure, karena kedainya rugi',p:2},{t:'Kotak 1 Customer Segments, karena bisnis ada karena ada pelanggan',p:10},{t:'Kotak 2 Value Propositions, karena rasa adalah segalanya',p:5}],
+   exp:'Isi dari kanan dulu. Pahami pelanggan dan uang masuknya, baru periksa dapurnya.',ref:'P4: Cara mengisi BMC'},
+  {id:'q2c',q:'Benang merah mana yang paling fatal putus di Kedai A?',
+   opts:[{t:'Kotak 1 dengan 2: target anak kos, tapi janjinya teh premium Rp15.000 untuk kaum urban',p:10},{t:'Kotak 6 dengan 9: freezer terlalu mahal',p:2},{t:'Kotak 3 dengan 4: spanduk kurang besar',p:2},{t:'Tidak ada yang putus, rasanya saja yang kurang enak',p:0}],
+   exp:'Value proposition harus menjawab kebutuhan segmen. Anak kos butuh hemat, Kedai A menjual premium. Lokasinya pun bukan tempat anak kos lewat.',ref:'P4: Kotak-kotak harus saling nyambung'},
+  {id:'q3c',q:'Untuk masalah es batu yang mahal, perbaikannya masuk ke kotak mana?',
+   opts:[{t:'Kotak 5 Revenue Streams: naikkan harga jual',p:0},{t:'Kotak 6 Key Resources: beli freezer lebih besar',p:4},{t:'Kotak 8 Key Partners: kerja sama langsung dengan pabrik es batu',p:10},{t:'Kotak 3 Channels: jual lewat GoFood',p:1}],
+   exp:'Pilih mitra untuk hal yang lebih murah atau lebih baik dikerjakan pihak lain. Kedai B membuktikannya: harga es separuh eceran.',ref:'P4: Key Partners'},
+  {id:'q4c',q:'Di draf kanvas Mbak Sari, benang merah mana yang putus?',
+   opts:[{t:'Kotak 1 dengan 2: segmen tidak cocok dengan janji',p:0},{t:'Kotak 2 dengan 7: janji buka sampai malam, tapi aktivitasnya hanya jam 10.00 sampai 15.00',p:10},{t:'Kotak 3 dengan 5: GoFood tidak menghasilkan uang',p:2},{t:'Tidak ada yang putus',p:0}],
+   exp:'Dapur harus sanggup menepati janji. Janji “buka sampai malam” berarti ada aktivitas jaga shift malam.',ref:'P4: Benang merah 2 dengan 6, 7, 8'},
+  {id:'q5c',q:'Apa yang terlupa di kotak 9 Cost Structure milik Mbak Sari?',
+   opts:[{t:'Gaji karyawan shift malam dan komisi aplikasi pesan-antar',p:10},{t:'Biaya riset rasa baru',p:2},{t:'Tidak ada, kotak 9 sudah lengkap',p:0},{t:'Biaya spanduk besar seperti Kedai A',p:1}],
+   exp:'Setiap sumber daya dan aktivitas punya biaya. Shift malam butuh gaji, GoFood memotong komisi per pesanan.',ref:'P4: Benang merah 6, 7, 8 dengan 9'},
+  {id:'q6c',q:'Selain anak kos, segmen mana yang bisa dilayani Mbak Sari dan selama ini terlewat oleh Kedai A?',
+   opts:[{t:'Karyawan bank yang libur di akhir pekan',p:2},{t:'Driver ojol yang mangkal dan menunggu order sampai malam',p:10},{t:'Wisatawan Tawangmangu',p:2},{t:'Semua orang',p:0}],
+   exp:'Kedai B menyebut 80% pembelinya anak kos dan driver ojol. Struk rahasia Kedai A bahkan menunjukkan jam tersibuknya diisi driver ojol. “Semua orang” bukan segmen.',ref:'P4: Customer Segments'}
+ ],
+ ded:{q:'Kesimpulan autopsi: kenapa Kedai A tutup dalam tiga bulan?',
+  opts:[{t:'Rasanya kurang enak dibanding Kedai B',p:0},{t:'Kotak-kotak kanvasnya tidak nyambung: lokasi dan harga tidak cocok dengan segmen, saluran hanya di tempat, dan biaya bahan tinggi karena tanpa mitra',p:10},{t:'Spanduknya kurang besar sehingga kurang promosi',p:1}],
+  ev:['e1','e2','e3','e4'],
+  exp:'Lokasi, harga, saluran, dan nota biaya menunjukkan kanvas yang terputus di banyak titik. Rasa yang enak saja tidak cukup.'},
+ outro:[
+  {w:'sari',t:'Berarti saya harus menambah shift malam, menghitung gajinya, dan cari pabrik es. Untung belum buka.'},
+  {w:'gilang',t:'Kalau dari dulu saya baca kanvas seperti cerita, mungkin kedai saya masih buka.'},
+  {w:'wening',t:'Satu berkas lagi, Detektif. Yang ini soal aplikasi canggih yang tidak dipakai siapa pun.'}
+ ],
+ out:{hi:'Kedai Es Teh Mbak Sari buka dengan kanvas yang nyambung: shift malam, kerja sama pabrik es, dan GoFood. Antrean panjang tiap siang.',
+      mid:'Kedai Mbak Sari laku di siang hari, tapi janji buka malam tidak tertepati. Ulasan GoFood tertahan di bintang tiga.',
+      lo:'Mbak Sari mengulang kesalahan Kedai A. Tabungan tiga tahunnya habis dalam empat bulan.',
+      sec:'Mbak Sari membuat paket “es teh shift malam” khusus driver ojol, dan malam hari jadi jam terlarisnya.'}
+},
+/* ---------------- BERKAS 4 ---------------- */
+{
+ id:'c4',no:4,title:'Aplikasi Canggih yang Dihapus',where:'Kantin kampus, pukul 09.45',
+ materi:'Pertemuan 5: Value Proposition Canvas',
+ scene:scene4,
+ intro:[
+  {w:'nar',t:'Berkas 4. Kantin kampus, pukul 09.45. Lima belas menit istirahat terasa seperti perang. Antrean mengular, menu cepat habis.'},
+  {w:'wening',t:'KantinKu adalah aplikasi kantin kampus. Timnya menghabiskan Rp40 juta untuk menu 3D augmented reality, chatbot, dan dua belas tema warna. Dua bulan kemudian aplikasinya dihapus dari HP mahasiswa.'},
+  {w:'laras',t:'Kami mau mengajukan dana Dinas untuk versi 2. Rencananya tambah fitur VR dan poin NFT. Kali ini pasti laku.'},
+  {w:'wening',t:'Sebelum dana keluar, cari tahu apa yang sebenarnya dibutuhkan pelanggan. Ukur dulu, baru jahit.'},
+  {w:'wening',t:'Pakai Value Proposition Canvas. Lingkaran untuk pelanggan: jobs, pains, gains. Kotak untuk produk: produk dan layanan, pain relievers, gain creators.'}
+ ],
+ clues:[
+  {id:'f1',title:'Notulen Rapat KantinKu',kind:'Dokumen di laptop',
+   mission:'Temukan keputusan yang membuat tim “menjahit tanpa mengukur”.',
+   summary:'Survei ke mahasiswa ditunda sampai aplikasi jadi. Fitur yang dipilih: menu 3D AR, chatbot AI, dan 12 tema warna. Anggaran Rp40 juta.',
+   body:[
+    {t:'list',u:['Hadir: Laras, Bimo, Tika, Yoga.','Bimo: menu 3D augmented reality akan bikin kita viral.','!Laras: survei ke mahasiswa nanti saja setelah aplikasi jadi, biar tidak buang waktu.','Tika: chatbot rekomendasi makanan pakai AI biar kelihatan canggih.','Keputusan: 12 tema warna agar pengguna bisa personalisasi.','Anggaran Rp40 juta, waktu pengerjaan 3 bulan.']}
+   ]},
+  {id:'f2',title:'Wawancara Dimas',kind:'Transkrip wawancara',
+   mission:'Temukan customer job fungsional Dimas saat jam istirahat.',
+   summary:'Istirahat Dimas cuma 15 menit dan ia tidak mau telat masuk kelas. Antre bisa 10 menit, menu kadang habis, ia jarang bawa tunai, dan uang sakunya tipis di akhir bulan.',
+   body:[
+    {t:'chat',u:[
+     ['Dimas','Aku kuliah dari jam 7. Istirahat cuma 15 menit sebelum kelas jam 10.'],
+     ['Dimas','!Yang aku mau cuma satu: makan beres dalam 15 menit itu, tidak telat masuk kelas.'],
+     ['Dimas','Antre di kantin bisa 10 menit sendiri. Kadang menunya sudah habis.'],
+     ['Dimas','Aku jarang bawa uang tunai, maunya bayar QRIS.'],
+     ['Dimas','Menu 3D? Buat apa lihat ayam geprek tiga dimensi, aku cuma lapar, Kak.'],
+     ['Dimas','Akhir bulan uang saku tipis, jadi harga juga penting.']]}
+   ]},
+  {id:'f3',title:'Dasbor Analitik KantinKu',kind:'Tampilan tablet',
+   mission:'Temukan angka yang menunjukkan aplikasi tidak menyelesaikan masalah pengguna.',
+   summary:'Dari 2.300 unduhan, hanya 4% yang masih aktif di minggu ke-8. Menu AR hanya dipakai 2% sesi. Fitur pesan dan bayar justru tidak ada.',
+   body:[
+    {t:'table',head:['Metrik','Nilai'],rows:[
+     ['Unduhan total','2.300'],['!Pengguna aktif minggu ke-8','92 orang (4%)'],['Pemakaian menu 3D AR','2% sesi'],
+     ['Ganti tema warna','31% pengguna, sekali saja'],['!Fitur pesan dan bayar','Tidak tersedia'],['Rata-rata durasi sesi','40 detik']]}
+   ]},
+  {id:'f4',title:'Hasil Survei “Tes 40%”',kind:'Lembar survei',
+   mission:'Temukan hasil yang menunjukkan KantinKu belum mencapai product-market fit.',
+   summary:'Sangat kecewa 9%, agak kecewa 21%, tidak kecewa 70%. Komentar terbanyak: ingin bisa pesan dari kelas.',
+   body:[
+    {t:'list',u:['Pertanyaan: seberapa kecewa kamu kalau KantinKu tidak ada lagi?','!Sangat kecewa: 9%.','Agak kecewa: 21%.','Tidak kecewa: 70%.','Komentar terbanyak: “Kalau bisa pesan dari kelas, baru aku pakai.”']}
+   ]},
+  {id:'f5',title:'Wawancara Bu Narti',kind:'Transkrip wawancara',
+   mission:'Temukan pain dari sisi penjual kantin.',
+   summary:'Bu Narti sering masak kebanyakan karena tidak tahu jumlah pesanan. QRIS sudah ada tapi jarang dipakai. Membuat foto menu 3D menyita tiga jam.',
+   body:[
+    {t:'chat',u:[
+     ['Bu Narti','Jam 9.45 itu kayak perang, Mas. Semua datang barengan.'],
+     ['Bu Narti','!Saya sering masak kebanyakan, sisanya banyak. Kalau tahu pesanan dari awal, saya bisa masak pas.'],
+     ['Bu Narti','QRIS saya sudah punya, tapi jarang dipakai karena antre.'],
+     ['Bu Narti','Aplikasi KantinKu? Saya disuruh foto menu buat 3D, tiga jam sendiri.']]}
+   ]},
+  {id:'f6',title:'Poster “PO Kantin” HIMA',kind:'Papan info',
+   mission:'Temukan bukti bahwa solusi sederhana justru dipakai mahasiswa.',
+   summary:'Grup PO Kantin HIMA beranggota 312 mahasiswa. Hari ini 87 pesanan diambil jam 9.45 tanpa antre. Admin kelelahan merekap manual.',
+   body:[
+    {t:'chat',u:[
+     ['Admin HIMA','Format PO: nama, menu, jam ambil. Ditutup jam 9.30.'],
+     ['Info grup','Anggota: 312 mahasiswa.'],
+     ['Admin HIMA','!Rekap hari ini: 87 pesanan, diambil jam 9.45 tanpa antre.'],
+     ['Mahasiswa','Makasih min, aku nggak telat kelas lagi.'],
+     ['Admin HIMA','Tapi capek juga rekap manual tiap hari.']]}
+   ]}
+ ],
+ secret:{id:'s4',title:'Papan Kecil di Lapak Es',kind:'Bukti rahasia',
+  summary:'Kantin tutup pukul 16.00, padahal ada sekitar 400 mahasiswa kelas sore (16.00–18.30) yang tidak punya tempat beli makan. Pain tanpa solusi berarti peluang baru.',
+  body:[
+   {t:'p',u:['Papan kecil bertuliskan “Kantin tutup 16.00”.','Ada sticky note di baliknya, tulisan Bu Narti:','“Kelas sore 16.00 sampai 18.30 ada sekitar 400 anak. Banyak yang tanya masih buka atau tidak.”','“Kalau ada yang ngumpulin pesanan sore, saya mau masak lagi.”']}
+  ]},
+ qs:[
+  {id:'q1d',q:'Kesalahan utama tim KantinKu adalah...',
+   opts:[{t:'Fiturnya kurang canggih',p:0},{t:'Langsung membangun produk tanpa mengenali jobs, pains, dan gains pelanggan',p:10},{t:'Kurang promosi di media sosial',p:2},{t:'Harga aplikasinya terlalu murah',p:0}],
+   exp:'Seperti tukang jahit yang langsung menjahit tanpa mengukur. Hasilnya baju bagus yang tidak muat di badan siapa pun.',ref:'P5: Ukur dulu, baru jahit'},
+  {id:'q2d',q:'Customer job fungsional Dimas di kantin adalah...',
+   opts:[{t:'Terlihat kekinian di depan teman',p:3},{t:'Melihat menu dalam tampilan 3D',p:0},{t:'Makan beres dalam 15 menit istirahat tanpa telat masuk kelas',p:10},{t:'Merasa senang karena self-reward',p:3}],
+   exp:'Job fungsional adalah tugas nyata yang ingin beres. Pilihan lain adalah job sosial dan emosional, atau sekadar fitur.',ref:'P5: Customer jobs'},
+  {id:'q3d',q:'Pasangan pain dan pain reliever mana yang paling tepat?',
+   opts:[{t:'Antre panjang saat istirahat dengan 12 tema warna',p:0},{t:'Menu cepat habis dengan menu 3D AR',p:1},{t:'Uang saku tipis dengan chatbot AI',p:0},{t:'Antre panjang saat istirahat dengan pesan dari kelas, bayar QRIS, tinggal ambil',p:10}],
+   exp:'Pain reliever seperti plester: menempel tepat di bagian yang sakit.',ref:'P5: Pain relievers'},
+  {id:'q4d',q:'Fitur mana yang tidak punya pasangan di lingkaran pelanggan dan sebaiknya dicoret?',
+   opts:[{t:'Fitur pesan dan bayar',p:0},{t:'Menu 3D AR, chatbot, dan 12 tema warna',p:10},{t:'Info menu yang masih tersedia',p:0},{t:'Pembayaran QRIS',p:0}],
+   exp:'Fitur tanpa pasangan kemungkinan tidak perlu. Datanya juga bicara: AR hanya dipakai 2% sesi.',ref:'P5: Cek fit'},
+  {id:'q5d',q:'KantinKu ada di tahap fit yang mana?',
+   opts:[{t:'Sudah product-market fit karena diunduh 2.300 kali',p:0},{t:'Problem-solution fit tercapai, gagal di product-market fit',p:4},{t:'Belum problem-solution fit: masalah tidak pernah dibuktikan dan solusinya tidak menjawab pain',p:10},{t:'Sudah business model fit',p:0}],
+   exp:'Unduhan karena penasaran bukan bukti. Tim tidak pernah membuktikan masalahnya, VPC-nya tidak nyambung, dan tes 40% hanya 9%.',ref:'P5: Tiga tahap fit'},
+  {id:'q6d',q:'Pernyataan value proposition mana yang paling baik untuk KantinKu versi 2?',
+   opts:[{t:'“Aplikasi kantin kami canggih, lengkap, dan modern untuk semua orang.”',p:0},{t:'“KantinKu punya AR, chatbot AI, dan 12 tema warna.”',p:2},{t:'“Kami membantu mahasiswa yang istirahatnya cuma 15 menit agar bisa makan tanpa antre, dengan pesan dari kelas, bayar QRIS, dan tahu menu yang masih ada.”',p:10}],
+   exp:'Pakai rumus: kami membantu [segmen] yang ingin [jobs] dengan [mengurangi pain] dan [menambah gain]. Jelas untuk siapa, masalah apa, dan manfaatnya.',ref:'P5: Pernyataan value proposition'},
+  {id:'q7d',q:'KantinKu juga melayani penjual. Gain creator yang paling pas untuk Bu Narti adalah...',
+   opts:[{t:'Rekap pesanan masuk sebelum 9.30 agar bisa masak pas dan tidak bersisa',p:10},{t:'Foto menu 3D yang lebih bagus',p:0},{t:'Chatbot untuk membalas pembeli',p:2}],
+   exp:'Satu produk bisa punya dua segmen, dan setiap segmen butuh profil serta value proposition sendiri.',ref:'P5: Satu produk, dua segmen'}
+ ],
+ ded:{q:'Rekomendasi untuk pengajuan dana KantinKu versi 2:',
+  opts:[{t:'Danai fitur VR dan poin NFT agar lebih canggih dari pesaing',p:0},{t:'Tunda dana besar. Danai uji coba kecil fitur pre-order dan QRIS bersama HIMA dan pemilik lapak, lalu ukur dengan tes 40%',p:10},{t:'Tutup KantinKu permanen, ide kantin digital tidak punya pasar',p:3}],
+  ev:['f2','f3','f4','f6'],
+  exp:'Wawancara, dasbor, survei, dan grup PO HIMA sama-sama menunjuk satu kebutuhan: pesan dulu, tinggal ambil. Buktikan dulu dalam skala kecil.'},
+ outro:[
+  {w:'laras',t:'Ternyata grup WA sederhana mengalahkan aplikasi Rp40 juta kami. Sakit, tapi jelas.'},
+  {w:'wening',t:'Keempat berkas selesai. Besok pagi kita menghadap Kepala Dinas. Rekomendasimu yang akan menentukan nasib dana itu.'}
+ ],
+ out:{hi:'KantinKu versi 2 hanya punya satu tombol utama: pesan dari kelas. Uji coba bersama HIMA mencapai 46% “sangat kecewa”, tanda product-market fit.',
+      mid:'Tim menambah fitur pesan, tapi tetap memaksakan VR. Aplikasinya berat, penggunanya bertahan sedikit.',
+      lo:'Versi 2 dengan VR dan poin NFT diluncurkan. Dana kedua habis, aplikasinya dihapus lagi dalam sebulan.',
+      sec:'Bu Narti membuka sesi pre-order sore untuk 400 mahasiswa kelas sore. Pain tanpa solusi berubah menjadi peluang baru.'}
+}
+];
+
+const FINAL={
+ intro:[
+  {w:'nar',t:'Kantor Dinas Koperasi dan UMKM Karanganyar. Selasa, pukul 08.00.'},
+  {w:'darmo',t:'Detektif {nama}, saya sudah membaca keempat berkas. Sekarang pertanyaan pentingnya: Rp150 juta ini sebaiknya dipakai bagaimana?'},
+  {w:'wening',t:'Ini kesimpulan besar. Ingat semua yang kamu temukan: tingkat perubahan, model bisnis, kanvas yang nyambung, dan fit dengan pelanggan.'}
+ ],
+ q:'Rekomendasi akhir untuk Dana Pendampingan Digital Rp150 juta:',
+ opts:[
+  {t:'Belikan setiap UMKM tablet dan software kasir premium yang sama, supaya semuanya langsung digital',p:0},
+  {t:'Pakai seluruh dana untuk iklan TikTok besar-besaran agar UMKM Karanganyar viral',p:3},
+  {t:'Pendampingan bertahap: setiap usaha mulai dari masalah dan tujuan terukur, uji coba skala kecil, diukur, baru dana ditambah. Sumber Jaya ke pesanan daring dan pembayaran non-tunai, LapakKampus diperkuat tanpa menjual data, Mbak Sari jalan dengan kanvas yang nyambung, KantinKu uji pre-order dulu',p:15},
+  {t:'Berikan seluruh dana ke usaha dengan omzet terbesar karena paling aman',p:2}
+ ],
+ best:2,
+ exp:'Transformasi digital bukan soal membeli alat mahal atau sekadar hadir di media sosial. Tingkat yang tepat ditentukan oleh pelanggan, dan setiap langkah harus punya tujuan terukur yang bisa dievaluasi.'
+};
+
+const ENDINGS={
+ bad:{title:'Akhir Buruk: Laporan Ditolak',
+  text:['Kepala Dinas mengikuti sebagian besar rekomendasimu. Hasilnya tidak seperti yang diharapkan.','Dana habis untuk hal yang tidak menjawab masalah. Usaha-usaha yang kamu periksa terus melemah, dan berkas-berkas itu kembali ke meja Dinas dengan cap merah.','Inspektur Wening menyimpan lencanamu di laci. “Kita ulang dari Buku Saku, Detektif. Membaca bukti itu keterampilan, dan keterampilan bisa dilatih.”'],
+  cons:'Konsekuensi: lencana dibekukan. Kamu wajib mengulang pelatihan sebelum menangani berkas baru.'},
+ good:{title:'Akhir Baik: Laporan Diterima',
+  text:['Sebagian besar rekomendasimu dipakai Dinas. Beberapa usaha mulai pulih, walau belum semuanya.','Inspektur Wening mengangguk sambil membereskan papan gabus. “Bagus. Tapi ada yang belum kamu lihat. Kadang bukti terpenting justru tidak diberi tanda.”'],
+  cons:'Konsekuensi: kamu diangkat menjadi detektif tetap. Satu laci di kantor masih terkunci untukmu.'},
+ true:{title:'Akhir Sejati: Benang Merah Terungkap',
+  text:['Semua rekomendasimu dijalankan, dan keempat usaha pulih dengan caranya masing-masing.','Lalu Inspektur Wening menarik benang merah di papan gabus. Sumber Jaya kini mencetak label untuk UMKM yang berjualan lewat LapakKampus Pro. Cup lucu Mbak Sari dicetak di Sumber Jaya. Pre-order kantin dan kedai es teh dibayar lewat QRIS yang sama.','“Lihat, Detektif. Mereka bukan empat kasus. Mereka satu ekosistem. Cabut satu lapisan, yang lain ikut goyah. Sambungkan, semuanya saling menghidupi.”'],
+  cons:'Konsekuensi: kamu diangkat menjadi Detektif Senior dan memegang kunci laci terakhir. Di dalamnya ada berkas baru: pemasaran digital.'}
+};
+
+/* ================= BUKU SAKU ================= */
+const NOTEBOOK=[
+ {tab:'P2 Transformasi',html:`
+ <h4>Tiga tingkat perubahan</h4>
+ <table><tr><th>Tingkat</th><th>Yang berubah</th><th>Contoh warung</th></tr>
+ <tr><td>Digitization</td><td>Format data, dari analog ke digital. Bisnisnya sama persis.</td><td>Catat penjualan di Excel, bukan buku tulis</td></tr>
+ <tr><td>Digitalization</td><td>Proses kerja dijalankan sistem. Model bisnis tetap.</td><td>Aplikasi kasir yang otomatis memotong stok</td></tr>
+ <tr><td>Digital transformation</td><td>Model bisnis: segmen, nilai, saluran, atau pendapatan.</td><td>Jadi dapur pusat untuk 3 aplikasi, tanpa ruang makan</td></tr></table>
+ <p>Uji berurutan: (1) ada data pindah dari kertas ke layar? (2) ada langkah kerja yang dikerjakan sistem? (3) ada blok model bisnis yang berubah? Berhenti di pertanyaan pertama yang jawabannya “ya, dan hanya itu”. Tingkat 3 tidak otomatis lebih baik.</p>
+ <h4>Salah kaprah</h4>
+ <p>Transformasi bukan soal beli software mahal. Punya akun TikTok baru penambahan saluran promosi. UMKM kecil tetap butuh, hanya bentuknya berbeda. Digital mengubah komposisi pekerjaan, bukan otomatis mengurangi karyawan.</p>
+ <h4>Disrupsi digital</h4>
+ <p>Perubahan yang membuat cara lama memberi nilai jadi tidak relevan. Pendatang melayani kebutuhan yang sama dengan struktur biaya dan pengalaman yang sangat berbeda. Menurut Christensen, pendatang masuk dari segmen yang diabaikan pemain besar, lalu naik kelas.</p>
+ <p>Anatomi: (1) ada friksi yang dianggap wajar, (2) teknologi baru menghapus friksi, (3) pendatang masuk dari segmen yang diabaikan, (4) efek jaringan dan data mempercepat pertumbuhan, (5) pemain lama baru merespons saat pasar sudah pindah.</p>
+ <h4>Kenapa pemain lama terlambat</h4>
+ <ul><li>Jebakan pelanggan terbaik: mendengarkan pelanggan besar yang belum butuh produk baru.</li><li>Takut kanibalisasi kanal lama.</li><li>Struktur biaya berat: gedung, cabang, mesin tetap harus dibayar.</li><li>Ukuran keberhasilan yang salah.</li><li>Keputusan lambat.</li></ul>
+ <h4>Enam tahap transformasi</h4>
+ <p>Temukan masalah, tetapkan tujuan terukur, pilih teknologi, siapkan orang dan proses, jalankan skala kecil, ukur dan perbaiki. Tahap tujuan paling sering dilewati.</p>
+ <h4>Level kematangan digital</h4>
+ <table><tr><td>0</td><td>Belum digital, semua manual</td></tr><tr><td>1</td><td>Hadir digital: ada media sosial atau WhatsApp Business, transaksi manual</td></tr><tr><td>2</td><td>Transaksi digital: pesanan dan pembayaran daring</td></tr><tr><td>3</td><td>Operasi digital: stok, kasir, keuangan terhubung</td></tr><tr><td>4</td><td>Berbasis data</td></tr><tr><td>5</td><td>Model bisnis digital: pendapatan baru yang hanya mungkin karena digital</td></tr></table>
+ <h4>Lima lapisan ekosistem</h4>
+ <p>Pengguna, platform dan pelaku sektoral, enabler (pembayaran, logistik, identitas digital, API), infrastruktur (internet, pusat data, cloud), serta regulator dan pendukung. Cabut satu lapisan saja, transaksi tidak terjadi.</p>
+ <h4>Data e-Conomy SEA 2025 (proyeksi)</h4>
+ <p>GMV ekonomi digital Indonesia sekitar US$100 miliar (naik 14%), e-commerce sekitar US$71 miliar, pembayaran digital sekitar US$538 miliar. GMV bukan pendapatan platform.</p>`},
+ {tab:'P3 Model Bisnis',html:`
+ <h4>Model bisnis dalam 3 pertanyaan</h4>
+ <p>Siapa yang dilayani, apa yang ditawarkan, dan dari mana uangnya masuk. Kalau bingung, mulai dari pertanyaan ketiga: ikuti uangnya.</p>
+ <h4>Arah transaksi</h4>
+ <table><tr><td>B2C</td><td>Usaha ke konsumen</td></tr><tr><td>B2B</td><td>Usaha ke usaha</td></tr><tr><td>C2C</td><td>Orang biasa ke orang biasa, platform di tengah</td></tr><tr><td>D2C</td><td>Produsen langsung ke konsumen, tanpa perantara</td></tr></table>
+ <p>Tanya dulu: penjualnya usaha atau orang biasa? Lalu: pembelinya usaha atau orang biasa?</p>
+ <h4>Delapan model bisnis digital</h4>
+ <table><tr><th>Model</th><th>Siapa bayar</th><th>Untuk apa</th></tr>
+ <tr><td>E-commerce</td><td>Pembeli</td><td>Barang milik toko sendiri</td></tr>
+ <tr><td>Marketplace</td><td>Penjual (dan pembeli)</td><td>Komisi, biaya layanan, iklan</td></tr>
+ <tr><td>SaaS</td><td>Pengguna, biasanya usaha</td><td>Sewa software berkala</td></tr>
+ <tr><td>Subscription</td><td>Pelanggan</td><td>Akses rutin selama langganan</td></tr>
+ <tr><td>Freemium</td><td>Sebagian kecil pengguna</td><td>Fitur premium</td></tr>
+ <tr><td>On-demand</td><td>Pelanggan dan mitra</td><td>Biaya layanan dan komisi</td></tr>
+ <tr><td>Iklan</td><td>Pengiklan</td><td>Perhatian pengguna</td></tr>
+ <tr><td>Afiliasi</td><td>Toko atau brand</td><td>Komisi tiap penjualan</td></tr></table>
+ <h4>E-commerce vs marketplace</h4>
+ <p>Pemilik barang atau pemilik tempat. E-commerce punya stok dan untung dari margin. Marketplace tidak punya stok dan untung dari komisi, biaya layanan, dan iklan.</p>
+ <h4>Yang dibawa pulang</h4>
+ <p>“Gratis” bukan berarti tanpa bisnis. Selalu ada yang bayar. Satu aplikasi bisa memakai banyak model sekaligus.</p>`},
+ {tab:'P4 BMC',html:`
+ <h4>Sembilan kotak dan pertanyaannya</h4>
+ <table><tr><th>No</th><th>Kotak</th><th>Pertanyaan</th></tr>
+ <tr><td>1</td><td>Customer Segments</td><td>Untuk siapa?</td></tr>
+ <tr><td>2</td><td>Value Propositions</td><td>Kenapa memilih kita?</td></tr>
+ <tr><td>3</td><td>Channels</td><td>Lewat jalan mana pelanggan tahu, membeli, menerima?</td></tr>
+ <tr><td>4</td><td>Customer Relationships</td><td>Bagaimana supaya balik lagi?</td></tr>
+ <tr><td>5</td><td>Revenue Streams</td><td>Uang masuk dari mana?</td></tr>
+ <tr><td>6</td><td>Key Resources</td><td>Apa yang wajib dimiliki?</td></tr>
+ <tr><td>7</td><td>Key Activities</td><td>Apa yang rutin dikerjakan?</td></tr>
+ <tr><td>8</td><td>Key Partners</td><td>Siapa yang membantu?</td></tr>
+ <tr><td>9</td><td>Cost Structure</td><td>Uang keluar untuk apa?</td></tr></table>
+ <p>Sisi kanan (1 sampai 5) adalah ruang makan: pelanggan dan uang masuk. Sisi kiri (6 sampai 9) adalah dapur: cara kerja dan uang keluar. Value proposition menjembatani keduanya. Isi dari kanan dulu.</p>
+ <h4>Empat benang merah</h4>
+ <ul><li>1 dengan 2: value proposition menjawab kebutuhan segmen.</li><li>2 dengan 5: pelanggan mau membayar untuk janji itu.</li><li>2 dengan 6, 7, 8: dapur sanggup menepati janji.</li><li>6, 7, 8 dengan 9: setiap sumber daya dan aktivitas punya biaya.</li></ul>
+ <h4>Tips</h4>
+ <p>“Semua orang” bukan segmen. Value proposition adalah masalah yang diselesaikan, bukan daftar fitur. Pilih mitra untuk hal yang lebih murah atau lebih baik dikerjakan pihak lain.</p>`},
+ {tab:'P5 VPC',html:`
+ <h4>Ukur dulu, baru jahit</h4>
+ <p>Customer profile (lingkaran) berisi jobs, pains, gains. Value map (kotak) berisi products and services, pain relievers, gain creators. Fit terjadi bila setiap isi kotak punya pasangan di lingkaran. VPC adalah kaca pembesar untuk kotak 1 dan 2 BMC.</p>
+ <h4>Customer profile</h4>
+ <table><tr><th>Bagian</th><th>Jenis</th></tr>
+ <tr><td>Jobs</td><td>Fungsional (tugas nyata), sosial (ingin dilihat seperti apa), emosional (perasaan yang dicari)</td></tr>
+ <tr><td>Pains</td><td>Hasil buruk, hambatan, risiko</td></tr>
+ <tr><td>Gains</td><td>Wajib ada, diharapkan, kejutan</td></tr></table>
+ <p>Segmen harus di-zoom sampai wajahnya jelas. Situasi sering lebih penting dari usia. Persona ditulis dari data nyata.</p>
+ <h4>Cek fit</h4>
+ <p>Cocok berarti fit. Pain tanpa solusi berarti peluang baru. Fitur tanpa pasangan kemungkinan tidak perlu.</p>
+ <h4>Tiga tahap fit</h4>
+ <table><tr><td>Problem-solution fit</td><td>Di atas kertas: masalah terbukti nyata, solusi masuk akal</td></tr><tr><td>Product-market fit</td><td>Di pasar: orang memakai, membeli, kembali lagi</td></tr><tr><td>Business model fit</td><td>Di dompet: pendapatan lebih besar dari biaya</td></tr></table>
+ <p>Tes 40% (Sean Ellis): tanya “seberapa kecewa kamu kalau produk ini tidak ada lagi?”. Minimal 40% menjawab “sangat kecewa” adalah tanda kuat product-market fit.</p>
+ <h4>Rumus pernyataan value proposition</h4>
+ <p>Singkat: Kami membantu [segmen] yang ingin [jobs] dengan [mengurangi pain] dan [menambah gain].</p>
+ <p>Lengkap: Untuk [segmen] yang [masalah], [nama produk] adalah [jenis produk] yang [manfaat utama]. Berbeda dengan [alternatif], kami [pembeda].</p>`}
+];
+/* ================= AUDIO: BGM, SUASANA, EFEK ================= */
+const SND=(function(){
+  const st={on:true,music:.6,sfx:.8,amb:.7};
+  let ctx=null,master,musicBus,sfxBus,ambBus,verb,delayIn,noiseBuf,brownBuf;
+  let want={m:null,a:null,al:1},cur=null,amb=null;
+  const mtof=m=>440*Math.pow(2,(m-69)/12);
+  const R=a=>a[Math.floor(Math.random()*a.length)];
+  function mk(v){const g=ctx.createGain();g.gain.value=v;return g;}
+
+  function init(){
+    if(ctx){if(ctx.state==='suspended'&&st.on&&!document.hidden)ctx.resume();return;}
+    const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
+    try{ctx=new AC();}catch(e){ctx=null;return;}
+    const comp=ctx.createDynamicsCompressor();comp.threshold.value=-16;comp.knee.value=12;comp.ratio.value=3;comp.attack.value=.01;comp.release.value=.25;
+    master=mk(st.on?1:0.0001);master.connect(comp);comp.connect(ctx.destination);
+    musicBus=mk(st.music*.7);sfxBus=mk(st.sfx);ambBus=mk(st.amb*.6);
+    [musicBus,sfxBus,ambBus].forEach(b=>b.connect(master));
+    verb=ctx.createConvolver();verb.buffer=impulse(3,2.6);const vo=mk(.85);verb.connect(vo);vo.connect(master);
+    [[musicBus,.32],[sfxBus,.16],[ambBus,.1]].forEach(p=>{const s=mk(p[1]);p[0].connect(s);s.connect(verb);});
+    const dl=ctx.createDelay(1.5);dl.delayTime.value=.42;const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=2400;const fb=mk(.33);
+    dl.connect(lp);lp.connect(fb);fb.connect(dl);const dOut=mk(.5);lp.connect(dOut);dOut.connect(musicBus);
+    delayIn=mk(1);delayIn.connect(dl);
+    noiseBuf=makeNoise(false);brownBuf=makeNoise(true);
+    setInterval(sched,25);
+    document.addEventListener('visibilitychange',()=>{if(!ctx)return;if(document.hidden)ctx.suspend();else if(st.on)ctx.resume();});
+    apply();
+  }
+  function impulse(sec,decay){const r=ctx.sampleRate,len=Math.floor(r*sec),b=ctx.createBuffer(2,len,r);for(let c=0;c<2;c++){const d=b.getChannelData(c);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,decay);}return b;}
+  function makeNoise(brown){const r=ctx.sampleRate,len=r*3,b=ctx.createBuffer(1,len,r),d=b.getChannelData(0);let last=0;for(let i=0;i<len;i++){const w=Math.random()*2-1;if(brown){last=(last+.02*w)/1.02;d[i]=last*3.5;}else d[i]=w;}return b;}
+
+  /* ---------- Instrumen ---------- */
+  function envGain(dest,t,a,peak,dec){const g=ctx.createGain();g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(peak,.0002),t+a);g.gain.exponentialRampToValueAtTime(.0001,t+a+dec);g.connect(dest);return g;}
+  function tone(type,f,t,a,peak,dec,dest,detune){const o=ctx.createOscillator();o.type=type;o.frequency.setValueAtTime(f,t);if(detune)o.detune.value=detune;o.connect(envGain(dest,t,a,peak,dec));o.start(t);o.stop(t+a+dec+.05);return o;}
+  function noise(t,dur,v,ftype,freq,q,dest,a){const s=ctx.createBufferSource();s.buffer=noiseBuf;const f=ctx.createBiquadFilter();f.type=ftype;f.frequency.setValueAtTime(freq,t);if(q)f.Q.value=q;s.connect(f);f.connect(envGain(dest,t,a||.003,v,dur));s.start(t,Math.random()*2);s.stop(t+(a||.003)+dur+.05);return f;}
+  function bass(m,t,dur,v,dest){const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=650;lp.connect(dest);const f=mtof(m);tone('triangle',f,t,.008,v,dur,lp);tone('sine',f,t,.008,v*.7,dur,lp);}
+  function ep(m,t,dur,v,dest){
+    const f=mtof(m),g=envGain(dest,t,.006,v,dur+.5);
+    const c=ctx.createOscillator();c.frequency.value=f;const mod=ctx.createOscillator();mod.frequency.value=f;
+    const mg=ctx.createGain();mg.gain.setValueAtTime(f*1.1,t);mg.gain.exponentialRampToValueAtTime(f*.06,t+.45);
+    mod.connect(mg);mg.connect(c.frequency);c.connect(g);c.start(t);mod.start(t);c.stop(t+dur+.6);mod.stop(t+dur+.6);
+    tone('sine',f*4,t,.002,v*.1,.12,dest);
+  }
+  function bell(f,t,v,dec,dest,echo){
+    const out=ctx.createGain();out.connect(dest);if(echo){const e=mk(echo);out.connect(e);e.connect(delayIn);}
+    [[1,1],[2.76,.45],[5.4,.2],[8.93,.07]].forEach((p,i)=>tone('sine',f*p[0],t,.003,v*p[1],dec/(1+i*1.4),out));
+    noise(t,.025,v*.35,'bandpass',Math.min(f*3,9000),1.5,out);
+  }
+  function pad(fs,t,dur,v,dest,cut){
+    const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=cut||900;
+    const g=ctx.createGain();g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v,t+Math.min(1.6,dur*.4));g.gain.setValueAtTime(v,t+dur*.75);g.gain.exponentialRampToValueAtTime(.0001,t+dur+1.4);
+    lp.connect(g);g.connect(dest);
+    fs.forEach(f=>[-8,8].forEach(d=>{const o=ctx.createOscillator();o.type='sawtooth';o.frequency.value=f;o.detune.value=d;o.connect(lp);o.start(t);o.stop(t+dur+1.5);}));
+  }
+  function kick(t,v,dest,f0,f1){const o=ctx.createOscillator();o.frequency.setValueAtTime(f0,t);o.frequency.exponentialRampToValueAtTime(f1,t+.12);o.connect(envGain(dest,t,.002,v,.35));o.start(t);o.stop(t+.45);}
+  function tick(t,v,dest,freq){noise(t,.018,v,'bandpass',freq,8,dest);}
+  function typeKey(t,dest,v){noise(t,.016,v,'highpass',1800+Math.random()*900,0,dest);tone('sine',150+Math.random()*50,t,.001,v*.8,.03,dest);}
+
+  /* ---------- Lagu ---------- */
+  function slendro(base){return k=>base*Math.pow(2,k*240/1200);}
+  function invTrack(base){const sc=slendro(base);let pos=5;return{bpm:66,bars:4,step(s,b,t,o,sd){
+    if(s===0&&b===0){pad([sc(0)/2,sc(3)/2,sc(0)],t,sd*64,.03,o,600);bell(sc(0)/4,t,.38,6,o,0);}
+    if(s===0&&b===2)bell(sc(2)/2,t,.2,4,o,.2);
+    if(s===0||s===10)kick(t,.1,o,100,68);
+    if(s%4===0&&Math.random()<.55){pos=Math.max(3,Math.min(10,pos+R([-2,-1,1,2])));bell(sc(pos),t,.1,1.6,o,.35);}
+    if(s%2===1&&Math.random()<.07)bell(sc(pos+5),t,.035,.8,o,.5);
+    if(s===8&&b===3&&Math.random()<.5)noise(t,.7,.02,'bandpass',sc(7),6,o,.35);
+  }};}
+  const TRACKS={
+    office:()=>({bpm:80,bars:4,step(s,b,t,o,sd){
+      const roots=[[38,41,45,42],[43,46,50,47],[46,41,43,44],[45,49,52,39]];
+      const ch=[[53,57,60,64],[57,58,62,65],[53,57,58,62],[55,58,61,64]];
+      if(s%4===0)bass(roots[b][s/4],t,sd*3.2,.3,o);
+      if(s===0)ch[b].forEach(m=>ep(m,t,sd*5,.06,o));
+      if(s===6||(s===14&&b%2))ch[b].forEach(m=>ep(m,t+sd*.15,sd*1.4,.04,o));
+      if(s%4===0)noise(t,.09,.045,'highpass',7000,0,o);
+      if(s%4===2)noise(t+sd*.33,.05,.028,'highpass',7000,0,o);
+      if(s===4||s===12)noise(t,.22,.055,'bandpass',2500,.8,o,.03);
+      if(b>=2&&(s===2||s===10)&&Math.random()<.45)ep(R([62,64,65,67,69,72,74])+12,t,sd*2,.045,o);
+    }}),
+    inv1:()=>invTrack(147),inv2:()=>invTrack(165),inv3:()=>invTrack(131),inv4:()=>invTrack(156),
+    analysis:()=>({bpm:96,bars:2,step(s,b,t,o,sd){
+      const arp=[[57,60,64,60,57,60,65,60],[55,59,62,59,55,59,64,59]];
+      if(s%2===0)ep(arp[b][s/2],t,sd*1.2,.04,o);
+      if(s===0){bass([45,43][b],t,sd*14,.22,o);pad([[57,60,64],[55,59,62]][b].map(mtof),t,sd*16,.018,o,700);}
+      if(s%4===0)tick(t,.1,o,s%8===0?3200:2400);
+    }}),
+    sidang:()=>({bpm:60,bars:2,step(s,b,t,o,sd){
+      if(s===0||s===2)kick(t,s===0?.3:.2,o,70,40);
+      if(s%4===0)tick(t,.06,o,2600);
+      if(s===0&&b===0){pad([38,45,50,53].map(mtof),t,sd*32,.028,o,500);bell(mtof(50),t,.14,4,o,.2);}
+      if(s===8&&b===1&&Math.random()<.6)bell(mtof(57+R([0,1,3])),t,.05,2,o,.3);
+    }}),
+    end_bad:()=>({bpm:56,bars:4,step(s,b,t,o,sd){
+      const c=[[50,53,57],[46,50,53],[43,46,50],[45,49,52]];
+      if(s===0){pad(c[b].map(mtof),t,sd*16,.032,o,600);bass(c[b][0]-12,t,sd*12,.2,o);}
+      if(s===8&&b%2===0)bell(mtof(c[b][2]+12),t,.06,3,o,.3);
+    }}),
+    end_good:()=>({bpm:72,bars:4,step(s,b,t,o,sd){
+      const c=[[53,57,60,64],[52,55,60,64],[50,53,57,60],[46,50,53,57]],r=[41,40,38,46];
+      if(s===0||s===8){c[b].forEach(m=>ep(m,t,sd*6,.05,o));bass(s===0?r[b]:r[b]+7,t,sd*6,.26,o);}
+      if(s%2===0)noise(t,.05,.025,'highpass',7500,0,o);
+      if((s===4||s===12)&&Math.random()<.5)ep(c[b][Math.floor(Math.random()*4)]+12,t,sd*2,.04,o);
+    }}),
+    end_true:()=>({bpm:84,bars:4,step(s,b,t,o,sd){
+      const c=[[50,54,57,62],[49,52,57,61],[47,50,54,57],[43,47,50,55]],r=[38,37,35,43];
+      if(s===0||s===6||s===10)c[b].forEach(m=>ep(m,t,sd*(s===0?5:3),.045,o));
+      if(s===0||s===8)bass(r[b]+(s===8?7:0),t,sd*6,.28,o);
+      if(s===0||s===8)kick(t,.22,o,110,45);
+      if(s%2===0){noise(t,.05,.025,'highpass',7500,0,o);bell(mtof(c[b][(s/2)%4]+24),t,.05,1.2,o,.3);}
+      if(s===0&&b===0)bell(mtof(38),t,.3,5,o,0);
+    }})
+  };
+
+  /* ---------- Suasana TKP ---------- */
+  function loopNoise(buf,ft,freq,v,out,q,srcs){const s=ctx.createBufferSource();s.buffer=buf;s.loop=true;const f=ctx.createBiquadFilter();f.type=ft;f.frequency.value=freq;if(q)f.Q.value=q;const g=mk(v);s.connect(f);f.connect(g);g.connect(out);s.start();srcs.push(s);return g;}
+  function every(min,max,fn,alive){(function go(){if(!alive.v)return;if(!document.hidden&&st.on)fn(ctx.currentTime+.05);setTimeout(go,(min+Math.random()*(max-min))*1000);})();}
+  function motor(t,out){const o=ctx.createOscillator();o.type='sawtooth';o.frequency.setValueAtTime(60,t);o.frequency.linearRampToValueAtTime(96,t+1.6);o.frequency.linearRampToValueAtTime(55,t+3.4);
+    const f=ctx.createBiquadFilter();f.type='bandpass';f.frequency.value=480;const g=ctx.createGain();g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.07,t+1.6);g.gain.exponentialRampToValueAtTime(.0001,t+3.5);
+    let last=g;if(ctx.createStereoPanner){const p=ctx.createStereoPanner();p.pan.setValueAtTime(R([-1,1]),t);p.pan.linearRampToValueAtTime(-p.pan.value,t+3.5);g.connect(p);last=p;}
+    o.connect(f);f.connect(g);last.connect(out);o.start(t);o.stop(t+3.6);}
+  function bird(t,out){const n=2+Math.floor(Math.random()*3);for(let i=0;i<n;i++){const tt=t+i*.14,o=ctx.createOscillator();o.frequency.setValueAtTime(2800,tt);o.frequency.exponentialRampToValueAtTime(4300,tt+.07);o.connect(envGain(out,tt,.005,.018,.08));o.start(tt);o.stop(tt+.12);}}
+  const AMB={
+    rain(out,al,srcs){loopNoise(noiseBuf,'bandpass',2600,.05,out,.4,srcs);loopNoise(brownBuf,'lowpass',500,.22,out,0,srcs);every(.12,.5,t=>noise(t,.02,.015+Math.random()*.03,'highpass',3000+Math.random()*3000,0,out),al);},
+    print(out,al,srcs){loopNoise(brownBuf,'lowpass',340,.32,out,0,srcs);const h=ctx.createOscillator();h.frequency.value=100;const hg=mk(.012);h.connect(hg);hg.connect(out);h.start();srcs.push(h);
+      every(1,1,t=>tick(t,.045,out,2100),al);every(2.6,4.6,t=>{kick(t,.16,out,80,50);noise(t,.12,.05,'bandpass',900,1.2,out);noise(t+.18,.08,.03,'bandpass',1400,2,out);},al);},
+    cowork(out,al,srcs){loopNoise(brownBuf,'lowpass',260,.28,out,0,srcs);every(3,7,t=>{const n=3+Math.floor(Math.random()*6);let tt=t;for(let i=0;i<n;i++){typeKey(tt,out,.045);tt+=.08+Math.random()*.1;}},al);},
+    street(out,al,srcs){loopNoise(brownBuf,'lowpass',650,.55,out,0,srcs);every(5,10,t=>motor(t,out),al);every(6,13,t=>bird(t,out),al);},
+    kantin(out,al,srcs){const gs=[420,850,1500].map(fr=>loopNoise(noiseBuf,'bandpass',fr,.035,out,1.4,srcs));
+      every(.25,.4,t=>gs.forEach(g=>g.gain.setTargetAtTime(.015+Math.random()*.05,t,.12)),al);
+      every(1.5,4,t=>bell(2200+Math.random()*1300,t,.025,.25,out,0),al);
+      every(5,9,t=>{for(let i=0;i<3;i++)bell(1800+Math.random()*1500,t+i*.07,.02,.18,out,0);},al);},
+    room(out,al,srcs){loopNoise(brownBuf,'lowpass',200,.2,out,0,srcs);every(1,1,t=>tick(t,.035,out,2400),al);}
+  };
+
+  /* ---------- Penjadwal ---------- */
+  function sched(){
+    if(!cur||!ctx)return;const sd=60/cur.tr.bpm/4;
+    if(cur.next<ctx.currentTime-.3)cur.next=ctx.currentTime+.05;
+    while(cur.next<ctx.currentTime+.12){const s=cur.step%16,b=Math.floor(cur.step/16)%cur.tr.bars;try{cur.tr.step(s,b,cur.next,cur.out,sd);}catch(e){}cur.next+=sd;cur.step++;}
+  }
+  function fadeOut(g,stopList){const now=ctx.currentTime;g.gain.cancelScheduledValues(now);g.gain.setValueAtTime(g.gain.value,now);g.gain.setTargetAtTime(.0001,now,.45);
+    setTimeout(()=>{(stopList||[]).forEach(s=>{try{s.stop();}catch(e){}});try{g.disconnect();}catch(e){}},2600);}
+  function apply(){
+    if(!ctx)return;const now=ctx.currentTime;
+    if(!cur||cur.key!==want.m){
+      if(cur)fadeOut(cur.out);cur=null;
+      if(want.m&&TRACKS[want.m]){const out=mk(.0001);out.connect(musicBus);out.gain.setTargetAtTime(1,now,.6);cur={key:want.m,tr:TRACKS[want.m](),out:out,next:now+.15,step:0};}
+    }
+    if(!amb||amb.key!==want.a){
+      if(amb){amb.alive.v=false;fadeOut(amb.out,amb.srcs);}amb=null;
+      if(want.a&&AMB[want.a]){const out=mk(.0001);out.connect(ambBus);out.gain.setTargetAtTime(1,now,.8);const a={key:want.a,out:out,alive:{v:true},srcs:[]};AMB[want.a](out,a.alive,a.srcs);amb=a;}
+    }
+    ambBus.gain.setTargetAtTime(st.amb*.6*want.al,now,.5);
+  }
+  function scene(ph,ch,ek){
+    const cA=['print','cowork','street','kantin'][ch]||'rain';
+    let w={m:'office',a:'rain',al:1};
+    if(['intro','inv','outro'].indexOf(ph)>=0)w={m:'inv'+(ch+1),a:cA,al:1};
+    else if(['mg','q','ded'].indexOf(ph)>=0)w={m:'analysis',a:cA,al:.4};
+    else if(ph==='final'||ph==='finalQ')w={m:'sidang',a:'room',al:1};
+    else if(ph==='ending'||ph==='resume')w={m:'end_'+(ek||'good'),a:null,al:1};
+    want=w;apply();
+  }
+
+  /* ---------- Efek suara ---------- */
+  function sfx(name){
+    if(!ctx||!st.on)return;const t=ctx.currentTime+.01,o=sfxBus;
+    switch(name){
+      case 'click':tone('sine',1050,t,.002,.05,.04,o);noise(t,.012,.035,'highpass',3000,0,o);break;
+      case 'type':typeKey(t,o,.05+Math.random()*.03);break;
+      case 'paper':{const f=noise(t,.3,.12,'bandpass',1200,.9,o,.05);f.frequency.exponentialRampToValueAtTime(5200,t+.3);noise(t+.14,.18,.05,'highpass',4200,0,o,.02);break;}
+      case 'stamp':kick(t,.45,o,115,40);noise(t,.09,.17,'lowpass',1400,0,o);noise(t+.005,.05,.07,'bandpass',3000,1,o);break;
+      case 'found':sfx('stamp');[659,784,988].forEach((f,i)=>bell(f,t+.16+i*.11,.1,1.4,o,0));break;
+      case 'wrong':{const lp=ctx.createBiquadFilter();lp.type='lowpass';lp.frequency.value=900;lp.connect(o);tone('square',220,t,.005,.05,.13,lp);tone('square',185,t+.14,.005,.05,.2,lp);break;}
+      case 'hint':noise(t,.7,.045,'bandpass',2600,3,o,.35);bell(523,t+.15,.06,1.6,o,0);break;
+      case 'secret':{const sc=slendro(523);for(let i=0;i<7;i++)bell(sc(i),t+i*.07,.07,1.6,o,0);noise(t,.9,.025,'highpass',6500,0,o,.2);break;}
+      case 'closed':kick(t,.6,o,95,35);noise(t,.15,.24,'lowpass',1000,0,o);bell(73.4,t+.05,.38,5,o,0);bell(146.8,t+.05,.12,4,o,0);break;
+      case 'gavel':[0,.28].forEach(d=>{tone('sine',190,t+d,.001,.35,.09,o);noise(t+d,.05,.2,'bandpass',850,2,o);kick(t+d,.25,o,90,50);});break;
+    }
+  }
+  function setOn(v){st.on=v;if(!ctx){if(v)init();return;}const now=ctx.currentTime;master.gain.setTargetAtTime(v?1:.0001,now,.08);if(v&&ctx.state==='suspended')ctx.resume();}
+  function setVol(k,v){st[k]=v;if(!ctx)return;const now=ctx.currentTime;if(k==='music')musicBus.gain.setTargetAtTime(v*.7,now,.05);if(k==='sfx')sfxBus.gain.setTargetAtTime(v,now,.05);if(k==='amb')ambBus.gain.setTargetAtTime(v*.6*want.al,now,.05);}
+  return{init:init,scene:scene,sfx:sfx,setOn:setOn,setVol:setVol,st:st};
+})();
+
+/* ---------- Panel suara ---------- */
+(function(){
+  const btn=document.getElementById('bSound'),pnl=document.getElementById('sndPanel');
+  function lbl(){btn.textContent=SND.st.on?'Suara':'Bisu';btn.setAttribute('aria-pressed',SND.st.on);}
+  btn.onclick=e=>{e.stopPropagation();SND.init();pnl.classList.toggle('hidden');};
+  pnl.addEventListener('click',e=>e.stopPropagation());
+  document.addEventListener('click',()=>pnl.classList.add('hidden'));
+  document.getElementById('sOn').onchange=e=>{SND.setOn(e.target.checked);lbl();};
+  [['sMus','music'],['sSfx','sfx'],['sAmb','amb']].forEach(p=>{document.getElementById(p[0]).oninput=e=>SND.setVol(p[1],+e.target.value/100);});
+  document.addEventListener('pointerdown',()=>SND.init());
+  document.addEventListener('keydown',()=>SND.init());
+  document.addEventListener('click',e=>{const b=e.target.closest('.btn,.opt,.boxes button,.cluelist button,.evcard.pick,.nb-tabs button');if(b&&!b.matches('#qLock,#dLock,#mgLock,#fLock,#dHint,#bSound'))SND.sfx('click');},true);
+  lbl();
+})();
+/* ================= MESIN GAME ================= */
+const $=s=>document.querySelector(s);
+const stage=$('#stage');
+const RM=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function fresh(){return{v:1,name:'',ch:-1,phase:'title',qi:0,clues:{},sec:{},ans:{},ded:{},mg:{},final:null,elapsed:0,started:false,done:false};}
+let S=fresh();
+const ALL_CLUES=CH.reduce((a,c)=>a.concat(c.clues.map(x=>x.id)),[]);
+function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function fmt(t){return t.replace(/\{nama\}/g,S.name||'Detektif');}
+function fmtTime(sec){const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=sec%60;return [h,m,s].map(n=>String(n).padStart(2,'0')).join(':');}
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.remove('hidden');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.add('hidden'),2600);}
+
+/* ---------- Skor ---------- */
+function clueObj(id){for(const c of CH){for(const k of c.clues)if(k.id===id)return k;if(c.secret.id===id)return c.secret;}return null;}
+function cluePts(id){const c=S.clues[id];if(!c||!c.found)return 0;return Math.max(1,5-Math.min(3,c.wrong||0)-(c.hint?2:0));}
+function qPts(q){const a=S.ans[q.id];return a==null?0:q.opts[a].p;}
+function qMax(q){return Math.max.apply(null,q.opts.map(o=>o.p));}
+function dedPts(ch){const d=S.ded[ch.id];if(!d)return 0;let p=ch.ded.opts[d.opt].p;d.ev.forEach(e=>{if(ch.ded.ev.indexOf(e)>=0)p+=5;});return p;}
+function dedMax(ch){return Math.max.apply(null,ch.ded.opts.map(o=>o.p))+10;}
+function mgPts(ch){if(!ch.mg)return 0;let p=0;ch.mg.items.forEach((it,i)=>{if(S.mg[i]===it.a)p+=2;});return p;}
+function mgMax(ch){return ch.mg?ch.mg.items.length*2:0;}
+function chScore(ch){let p=0;ch.clues.forEach(k=>p+=cluePts(k.id));ch.qs.forEach(q=>p+=qPts(q));p+=dedPts(ch)+mgPts(ch);return p;}
+function chMax(ch){let p=ch.clues.length*5;ch.qs.forEach(q=>p+=qMax(q));p+=dedMax(ch)+mgMax(ch);return p;}
+function secretCount(){return CH.filter(c=>S.sec[c.secret.id]).length;}
+function totals(){let sc=0,mx=0;CH.forEach(c=>{sc+=chScore(c);mx+=chMax(c);});const f=S.final==null?0:FINAL.opts[S.final].p;sc+=f;mx+=15;const bonus=secretCount()*5;return{base:sc,bonus:bonus,score:sc+bonus,max:mx,pct:Math.min(100,Math.round((sc+bonus)/mx*100))};}
+function chPct(ch){return Math.round(chScore(ch)/chMax(ch)*100);}
+
+/* ---------- HUD ---------- */
+function updHud(){
+  const found=ALL_CLUES.filter(id=>S.clues[id]&&S.clues[id].found).length;
+  $('#hClues').textContent=found+'/'+ALL_CLUES.length;
+  $('#hHints').textContent=Object.values(S.clues).filter(c=>c.hint).length;
+  $('#hTime').textContent=fmtTime(S.elapsed);
+  $('#hCase').textContent=S.ch>=0&&S.ch<CH.length?('Berkas '+CH[S.ch].no+' dari 4'):(S.phase==='final'?'Sidang Dinas':'Biro Telisik');
+}
+setInterval(()=>{if(S.started&&!S.done&&document.visibilityState==='visible'){S.elapsed++;$('#hTime').textContent=fmtTime(S.elapsed);}},1000);
+window.addEventListener('beforeunload',e=>{if(S.started&&!S.done){e.preventDefault();e.returnValue='';}});
+
+/* ---------- Dialog ---------- */
+function playDialog(lines,done){
+  const box=$('#dlg');let i=0,timer=null,full='';
+  box.classList.remove('hidden');
+  function show(){
+    const L=lines[i];const nar=L.w==='nar';
+    box.innerHTML='<div class="dlg-box '+(nar?'nar dlg-nar':'')+'">'+(nar?'':'<div class="dlg-por">'+portrait(L.w)+'</div>')+
+     '<div><div class="dlg-name">'+(nar?'':esc(L.w==='det'?('Detektif '+(S.name||'')):CAST[L.w].name))+'</div><div class="dlg-text" id="dlgText" aria-live="polite"></div>'+
+     '<div class="dlg-ctl"><button class="btn ghost small" id="dlgSkip">Lewati semua</button><button class="btn small" id="dlgNext">'+(i===lines.length-1?'Selesai':'Lanjut')+'</button></div></div></div>';
+    full=fmt(L.t);const el=$('#dlgText');
+    if(RM){el.textContent=full;timer=null;}
+    else{let k=0;el.textContent='';clearInterval(timer);timer=setInterval(()=>{k+=2;el.textContent=full.slice(0,k);if(k%6===0&&L.w!=='nar')SND.sfx('type');if(k>=full.length){clearInterval(timer);timer=null;}},16);}
+    $('#dlgNext').onclick=next;$('#dlgSkip').onclick=end;
+    box.querySelector('.dlg-text').onclick=next;
+    $('#dlgNext').focus({preventScroll:true});
+  }
+  function next(){if(timer){clearInterval(timer);timer=null;$('#dlgText').textContent=full;return;}i++;if(i>=lines.length)end();else show();}
+  function end(){clearInterval(timer);box.classList.add('hidden');box.innerHTML='';document.removeEventListener('keydown',kh);done&&done();}
+  function kh(e){if(!$('#modal').classList.contains('hidden'))return;if(e.key==='Escape'){e.preventDefault();end();}}
+  document.addEventListener('keydown',kh);
+  show();
+}
+
+/* ---------- Router ---------- */
+function go(phase){S.phase=phase;render();window.scrollTo({top:0,behavior:RM?'auto':'smooth'});}
+function render(){
+  updHud();
+  try{SND.scene(S.phase,S.ch,(S.phase==='ending'||S.phase==='resume')?endingKind():null);}catch(e){}
+  const p=S.phase;
+  if(p==='title')return rTitle();
+  if(p==='prolog')return rCine(sceneOffice(),PROLOG,()=>{S.ch=0;go('intro');},'Biro Telisik','Kantor detektif, Karanganyar');
+  if(p==='intro'){const c=CH[S.ch];return rCine(c.scene(),c.intro,()=>go('inv'),'Berkas '+c.no+': '+c.title,c.where);}
+  if(p==='inv')return rInv();
+  if(p==='mg')return rMg();
+  if(p==='q')return rQ();
+  if(p==='ded')return rDed();
+  if(p==='outro'){const c=CH[S.ch];return rCine(c.scene(),c.outro,()=>go('chEnd'),'Berkas '+c.no+': '+c.title,c.where);}
+  if(p==='chEnd')return rChEnd();
+  if(p==='final')return rCine(sceneOffice('dinas'),FINAL.intro,()=>go('finalQ'),'Sidang Dinas','Dinas Koperasi dan UMKM Karanganyar');
+  if(p==='finalQ')return rFinalQ();
+  if(p==='ending')return rEnding();
+  if(p==='resume')return rResume();
+}
+function rCine(svg,lines,done,title,where){
+  stage.innerHTML='<div class="casehead"><h2>'+esc(title)+'</h2><span class="where">'+esc(where)+'</span></div><div class="scene">'+svg+'</div>';
+  stage.querySelectorAll('.hs').forEach(g=>{g.removeAttribute('tabindex');g.removeAttribute('role');g.style.pointerEvents='none';});
+  playDialog(lines,done);
+}
+
+/* ---------- Judul ---------- */
+function rTitle(){
+  stage.innerHTML='<div class="title-wrap"><div class="title-art">'+sceneOffice()+'</div><div>'+
+   '<h1>Berkas Merah</h1><p class="sub">Empat kasus bisnis digital di Karanganyar. Kumpulkan bukti, analisis, lalu putuskan nasib dana Rp150 juta.</p>'+
+   '<div class="field"><label for="inName">Nama detektif</label><input id="inName" maxlength="30" autocomplete="off" placeholder="Tulis nama panggilanmu"></div>'+
+   '<div class="row"><button class="btn" id="bStart">Mulai penyelidikan</button><button class="btn ghost" id="bLoad">Lanjutkan dari kode simpan</button></div>'+
+   '<ul class="facts"><li>Pengantar Bisnis Digital, pertemuan 2 sampai 5</li><li>Sekitar 120 menit</li><li>3 akhir cerita</li><li>Ada musik dan efek suara, pakai headset</li></ul></div></div>';
+  const inp=$('#inName');inp.focus();
+  $('#bStart').onclick=()=>{const n=inp.value.trim();if(!n){toast('Isi nama detektif dulu.');inp.focus();return;}S=fresh();S.name=n;S.started=true;go('prolog');};
+  inp.onkeydown=e=>{if(e.key==='Enter')$('#bStart').click();};
+  $('#bLoad').onclick=openLoad;
+}
+
+/* ---------- Investigasi ---------- */
+function rInv(){
+  const c=CH[S.ch];
+  const found=c.clues.filter(k=>S.clues[k.id]&&S.clues[k.id].found).length;
+  const all=found===c.clues.length;
+  let list='';
+  c.clues.forEach(k=>{const st=S.clues[k.id]||{};list+='<li class="'+(st.found?'done':'')+'"><button data-open="'+k.id+'"><span class="dot">'+(st.found?'✓':'')+'</span><span>'+esc(k.title)+'<small>'+(st.found?'Bukti dicatat':esc(k.kind))+'</small></span></button></li>';});
+  if(S.sec[c.secret.id])list+='<li class="sec"><button data-open="'+c.secret.id+'"><span class="dot">★</span><span>'+esc(c.secret.title)+'<small>Bukti rahasia</small></span></button></li>';
+  stage.innerHTML='<div class="casehead"><h2>Berkas '+c.no+': '+esc(c.title)+'</h2><span class="tag">'+esc(c.materi)+'</span></div>'+
+   '<div class="inv"><div class="scene">'+c.scene()+'<div class="hint-strip">Klik benda atau orang bertanda lingkaran. Ada satu benda tanpa tanda.</div></div>'+
+   '<aside class="board"><h3>Daftar TKP</h3><p class="prog">'+found+' dari '+c.clues.length+' bukti ditemukan</p><ul class="cluelist">'+list+'</ul>'+
+   '<button class="btn" id="bAnalyze" '+(all?'':'disabled')+' style="width:100%">Mulai analisis</button>'+
+   (all?'':'<p class="prog" style="margin-top:8px">Temukan semua bukti bertanda untuk membuka tahap analisis.</p>')+'</aside></div>';
+  // penanda
+  stage.querySelectorAll('.scene .hs').forEach(g=>{
+    const id=g.dataset.id;const isSec=g.classList.contains('secret');
+    g.addEventListener('click',()=>openDoc(id));
+    g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openDoc(id);}});
+    if(isSec&&!S.sec[id])return;
+    const bb=g.getBBox();const x=bb.x+bb.width-2,y=bb.y+2;
+    const done=isSec?true:(S.clues[id]&&S.clues[id].found);
+    const ns='http://www.w3.org/2000/svg';const m=document.createElementNS(ns,'g');m.setAttribute('class','mk');m.setAttribute('pointer-events','none');
+    m.innerHTML=done?'<circle cx="'+x+'" cy="'+y+'" r="10" fill="'+(isSec?'#5a3e8e':'#2f6b4f')+'" stroke="#fff" stroke-width="2"/><path d="M'+(x-4.5)+' '+y+' l3 3.5 l6 -7" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>'
+     :'<circle class="pulse" cx="'+x+'" cy="'+y+'" r="9" fill="none" stroke="#f6df72" stroke-width="3"/><circle cx="'+x+'" cy="'+y+'" r="8" fill="#f6df72" stroke="#4a3a17" stroke-width="2"/><text x="'+x+'" y="'+(y+4.5)+'" font-size="13" text-anchor="middle" fill="#4a3a17" font-family="Special Elite,Courier New,monospace">?</text>';
+    g.appendChild(m);
+  });
+  stage.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>openDoc(b.dataset.open));
+  const ba=$('#bAnalyze');if(ba)ba.onclick=()=>{S.qi=0;go(c.mg&&!S.mgDone?'mg':'q');};
+}
+
+function renderBody(body){
+  let h='';
+  body.forEach((b,bi)=>{
+    const hasKey=(b.u||b.rows||[]).some(u=>Array.isArray(u)?String(u[b.t==='chat'?1:0]).charAt(0)==='!':String(u).charAt(0)==='!');
+    h+='<div class="blk'+(b.t==='chat'?' chat':'')+'" data-key="'+(hasKey?1:0)+'">';
+    if(b.t==='p'){h+='<p style="margin:0">'+b.u.map((u,ui)=>{const k=u.charAt(0)==='!';return '<span class="u" tabindex="0" data-k="'+(k?1:0)+'" data-uid="'+bi+'-'+ui+'">'+esc(k?u.slice(1):u)+'</span>';}).join(' ')+'</p>';}
+    if(b.t==='list'){h+='<ul class="doclist">'+b.u.map((u,ui)=>{const k=u.charAt(0)==='!';return '<li><span class="u" tabindex="0" data-k="'+(k?1:0)+'" data-uid="'+bi+'-'+ui+'">'+esc(k?u.slice(1):u)+'</span></li>';}).join('')+'</ul>';}
+    if(b.t==='chat'){h+=b.u.map((u,ui)=>{const k=u[1].charAt(0)==='!';return '<span class="msg"><span class="who">'+esc(u[0])+'</span><span class="u" tabindex="0" data-k="'+(k?1:0)+'" data-uid="'+bi+'-'+ui+'">'+esc(k?u[1].slice(1):u[1])+'</span></span>';}).join('');}
+    if(b.t==='table'){h+='<div class="tablewrap"><table class="dtable"><thead><tr>'+b.head.map(x=>'<th>'+esc(x)+'</th>').join('')+'</tr></thead><tbody>'+
+      b.rows.map((r,ri)=>{const k=String(r[0]).charAt(0)==='!';return '<tr class="u" tabindex="0" data-k="'+(k?1:0)+'" data-uid="'+bi+'-'+ri+'">'+r.map((c,ci)=>'<td>'+esc(ci===0&&k?c.slice(1):c)+'</td>').join('')+'</tr>';}).join('')+'</tbody></table></div>';}
+    h+='</div>';
+  });
+  return h;
+}
+
+function openDoc(id){
+  const k=clueObj(id);if(!k)return;
+  const isSec=id.charAt(0)==='s';
+  const st=S.clues[id]||(S.clues[id]={found:false,wrong:0,hint:false,miss:[],hit:null});
+  const solved0=st.found;if(isSec&&!S.sec[id]){S.sec[id]=true;st.found=true;}
+  const solved=st.found;
+  SND.sfx('paper');
+  const m=$('#modal');m.classList.remove('hidden');
+  m.innerHTML='<div class="sheet'+(solved?' solved':'')+'" role="dialog" aria-modal="true" aria-labelledby="docT">'+
+   '<div class="kind">'+esc(k.kind)+'</div><span class="stampmark">RAHASIA</span><h2 id="docT">'+esc(k.title)+'</h2>'+
+   (isSec?'<div class="mission secret">Bukti rahasia ditemukan. Benda ini tidak diberi tanda. Baca baik-baik, isinya bisa mengubah akhir cerita.</div>'
+         :'<div class="mission"><b>Misi:</b> '+esc(k.mission)+'</div>')+
+   '<div class="docbody">'+renderBody(k.body)+'</div>'+
+   '<div class="found-note'+(solved?'':' hidden')+'" id="fNote"><b>Catatan bukti</b><br>'+esc(k.summary)+'</div>'+
+   '<div class="sheet-foot" id="docFoot"></div></div>';
+  const sheet=m.querySelector('.sheet');
+  // tandai status
+  (st.miss||[]).forEach(u=>{const el=sheet.querySelector('[data-uid="'+u+'"]');if(el)el.classList.add('miss');});
+  if(st.hit){const el=sheet.querySelector('[data-uid="'+st.hit+'"]');if(el)el.classList.add('hit');}
+  if(st.hint&&!solved)sheet.querySelectorAll('.blk[data-key="1"]').forEach(b=>b.classList.add('hinted'));
+  if(isSec&&!st.hit){sheet.querySelectorAll('.u').forEach(u=>u.style.cursor='default');}
+  function foot(){
+    const f=$('#docFoot');
+    if(st.found){f.innerHTML='<button class="btn" id="dClose">'+(isSec?'Simpan ke papan bukti':'Kembali ke TKP')+'</button>';}
+    else f.innerHTML=(st.hint?'':'<button class="btn ghost" id="dHint">Minta bisikan Inspektur (poin -2)</button>')+'<button class="btn ghost" id="dLater">Tutup dulu</button>';
+    const c=$('#dClose');if(c)c.onclick=closeDoc;
+    const l=$('#dLater');if(l)l.onclick=closeDoc;
+    const h=$('#dHint');if(h)h.onclick=()=>{SND.sfx('hint');st.hint=true;sheet.querySelectorAll('.blk[data-key="1"]').forEach(b=>b.classList.add('hinted'));toast('Inspektur Wening: “Perhatikan bagian yang bergaris putus-putus.”');updHud();foot();};
+    (c||l).focus({preventScroll:true});
+  }
+  foot();
+  if(!solved&&!isSec){
+    sheet.querySelectorAll('.u').forEach(u=>{
+      const act=()=>{
+        if(st.found||u.classList.contains('miss'))return;
+        if(u.dataset.k==='1'){
+          SND.sfx('found');st.found=true;st.hit=u.dataset.uid;u.classList.add('hit');sheet.classList.add('solved');
+          sheet.querySelectorAll('.blk.hinted').forEach(b=>b.classList.remove('hinted'));
+          const sp=document.createElement('div');sp.className='bigstamp';sp.textContent='BUKTI';sheet.appendChild(sp);
+          $('#fNote').classList.remove('hidden');foot();updHud();
+          $('#fNote').scrollIntoView({behavior:RM?'auto':'smooth',block:'nearest'});
+        }else{
+          SND.sfx('wrong');st.wrong=(st.wrong||0)+1;st.miss=st.miss||[];st.miss.push(u.dataset.uid);u.classList.add('miss');
+          u.classList.add('shake');setTimeout(()=>u.classList.remove('shake'),350);
+          toast(st.wrong>=3?'Belum tepat. Baca ulang misinya, atau minta bisikan.':'Bukan itu. Baca lagi misinya.');
+        }
+      };
+      u.addEventListener('click',act);
+      u.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();act();}});
+    });
+  }
+  if(isSec&&!solved0)SND.sfx('secret');if(isSec){toast('Bukti rahasia! Bonus untuk akhir cerita.');updHud();}
+}
+function closeDoc(){const m=$('#modal');m.classList.add('hidden');m.innerHTML='';if(S.phase==='inv')rInv();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#modal').classList.contains('hidden')){closeDoc();}});
+$('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closeDoc();});
+
+/* ---------- Papan bukti samping ---------- */
+function evidenceAside(c,title){
+  let h='<aside class="board"><h3>'+(title||'Papan bukti')+'</h3><p class="prog">Catatan dari TKP. Pakai untuk menjawab.</p><div class="evcards">';
+  c.clues.forEach(k=>{if(S.clues[k.id]&&S.clues[k.id].found)h+='<div class="evcard"><b>'+esc(k.title)+'</b>'+esc(k.summary)+'</div>';});
+  if(S.sec[c.secret.id])h+='<div class="evcard sec"><b>★ '+esc(c.secret.title)+'</b>'+esc(c.secret.summary)+'</div>';
+  h+='</div><div class="row" style="margin-top:10px"><button class="btn ghost small" data-reopen="1">Buka ulang dokumen</button></div></aside>';
+  return h;
+}
+function wireReopen(c){const b=stage.querySelector('[data-reopen]');if(b)b.onclick=()=>openPicker(c);}
+function openPicker(c){
+  const m=$('#modal');m.classList.remove('hidden');
+  let list=c.clues.map(k=>'<li><button data-o="'+k.id+'"><span class="dot">✓</span><span>'+esc(k.title)+'</span></button></li>').join('');
+  if(S.sec[c.secret.id])list+='<li class="sec"><button data-o="'+c.secret.id+'"><span class="dot">★</span><span>'+esc(c.secret.title)+'</span></button></li>';
+  m.innerHTML='<div class="sheet" role="dialog" aria-modal="true"><div class="kind">Arsip berkas '+c.no+'</div><h2>Buka ulang dokumen</h2><ul class="cluelist done">'+list+'</ul><div class="sheet-foot"><button class="btn" id="pClose">Tutup</button></div></div>';
+  m.querySelectorAll('[data-o]').forEach(b=>b.onclick=()=>openDoc(b.dataset.o));
+  $('#pClose').onclick=closeDoc;
+}
+
+/* ---------- Minigame ---------- */
+function rMg(){
+  const c=CH[S.ch],g=c.mg;
+  let items=g.items.map((it,i)=>'<div class="mg-item"><p>'+(i+1)+'. '+esc(it.t)+'</p><div class="boxes" role="group" aria-label="Pilih nomor kotak">'+
+   [1,2,3,4,5,6,7,8,9].map(n=>'<button data-i="'+i+'" data-n="'+n+'" class="'+(S.mg[i]===n?'on':'')+'" aria-pressed="'+(S.mg[i]===n)+'">'+n+'</button>').join('')+'</div></div>').join('');
+  stage.innerHTML='<div class="casehead"><h2>'+esc(g.title)+'</h2><span class="tag">Uji ketajaman</span></div><div class="qwrap"><div class="qcard">'+
+   '<div class="qmeta">Berkas '+c.no+' · Latihan sebelum analisis</div><p class="ctx">'+esc(g.intro)+'</p>'+
+   '<div class="bmc"><div class="kp"><b>8</b>Key Partners</div><div class="ka"><b>7</b>Key Activities</div><div class="kr"><b>6</b>Key Resources</div><div class="vp"><b>2</b>Value Propositions</div><div class="cr"><b>4</b>Customer Relationships</div><div class="chn"><b>3</b>Channels</div><div class="cs"><b>1</b>Customer Segments</div><div class="cost"><b>9</b>Cost Structure</div><div class="rev"><b>5</b>Revenue Streams</div></div>'+
+   '<div class="mg-grid">'+items+'</div><div class="qfoot"><span class="note">Jawaban baru dinilai di akhir.</span><button class="btn" id="mgLock">Kunci jawaban</button></div></div>'+evidenceAside(c)+'</div>';
+  stage.querySelectorAll('.boxes button').forEach(b=>b.onclick=()=>{S.mg[+b.dataset.i]=+b.dataset.n;rMgKeep();});
+  function rMgKeep(){const y=window.scrollY;rMg();window.scrollTo(0,y);}
+  $('#mgLock').onclick=()=>{const n=g.items.filter((it,i)=>S.mg[i]).length;if(n<g.items.length){toast('Masih ada '+(g.items.length-n)+' pernyataan yang belum diberi nomor kotak.');return;}SND.sfx('stamp');S.mgDone=true;S.qi=0;toast('Inspektur Wening: “Dicatat. Sekarang analisis kasusnya.”');go('q');};
+  wireReopen(c);
+}
+
+/* ---------- Pertanyaan ---------- */
+const REACT=['Dicatat.','Hmm, menarik. Lanjut.','Baik, aku tulis di berkas.','Alasanmu kucatat.','Oke. Pertanyaan berikutnya.','Simpan dulu keyakinanmu itu.'];
+function rQ(){
+  const c=CH[S.ch],q=c.qs[S.qi];let sel=S.ans[q.id];
+  const L='ABCDE';
+  stage.innerHTML='<div class="casehead"><h2>Berkas '+c.no+': Analisis</h2><span class="where">'+esc(c.title)+'</span></div><div class="qwrap"><div class="qcard">'+
+   '<div class="qmeta">Pertanyaan '+(S.qi+1)+' dari '+c.qs.length+'</div><h2>'+esc(q.q)+'</h2>'+
+   '<div class="opts" role="radiogroup">'+q.opts.map((o,i)=>'<button class="opt'+(sel===i?' sel':'')+'" role="radio" aria-checked="'+(sel===i)+'" data-i="'+i+'"><span class="let">'+L[i]+'</span><span>'+esc(o.t)+'</span></button>').join('')+'</div>'+
+   '<div class="qfoot"><span class="note">Pilihanmu baru dinilai di akhir.</span><button class="btn" id="qLock" '+(sel==null?'disabled':'')+'>Kunci jawaban</button></div></div>'+evidenceAside(c)+'</div>';
+  stage.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{sel=+b.dataset.i;stage.querySelectorAll('.opt').forEach(x=>{x.classList.toggle('sel',x===b);x.setAttribute('aria-checked',x===b);});$('#qLock').disabled=false;});
+  $('#qLock').onclick=()=>{SND.sfx('stamp');S.ans[q.id]=sel;toast('Inspektur Wening: “'+REACT[(S.qi+c.no)%REACT.length]+'”');if(S.qi<c.qs.length-1){S.qi++;go('q');}else go('ded');};
+  wireReopen(c);
+}
+
+/* ---------- Deduksi ---------- */
+function rDed(){
+  const c=CH[S.ch],d=c.ded;const cur=S.ded[c.id]||{opt:null,ev:[]};let opt=cur.opt,ev=cur.ev.slice();
+  const L='ABC';
+  let cards='';c.clues.forEach(k=>{cards+='<button class="evcard pick'+(ev.indexOf(k.id)>=0?' on':'')+'" data-e="'+k.id+'" aria-pressed="'+(ev.indexOf(k.id)>=0)+'"><b>'+esc(k.title)+'</b>'+esc(k.summary)+'</button>';});
+  stage.innerHTML='<div class="casehead"><h2>Berkas '+c.no+': Deduksi</h2><span class="where">Tarik benang merahnya</span></div>'+
+   '<div class="qcard" style="max-width:980px;margin:0 auto"><div class="qmeta">Kesimpulan akhir berkas</div><h2>'+esc(d.q)+'</h2>'+
+   '<div class="opts" role="radiogroup">'+d.opts.map((o,i)=>'<button class="opt'+(opt===i?' sel':'')+'" role="radio" aria-checked="'+(opt===i)+'" data-i="'+i+'"><span class="let">'+L[i]+'</span><span>'+esc(o.t)+'</span></button>').join('')+'</div>'+
+   '<h2 style="margin-top:22px">Pilih 2 bukti terkuat yang mendukung kesimpulanmu</h2><div class="evcards" style="max-height:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">'+cards+'</div>'+
+   '<div class="qfoot"><span class="note" id="dNote">'+ev.length+' dari 2 bukti dipilih</span><button class="btn" id="dLock">Tutup berkas dengan kesimpulan ini</button></div></div>';
+  stage.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{opt=+b.dataset.i;stage.querySelectorAll('.opt').forEach(x=>{x.classList.toggle('sel',x===b);x.setAttribute('aria-checked',x===b);});});
+  stage.querySelectorAll('.evcard.pick').forEach(b=>b.onclick=()=>{const id=b.dataset.e;const i=ev.indexOf(id);if(i>=0)ev.splice(i,1);else{if(ev.length>=2){toast('Maksimal 2 bukti. Batalkan salah satu dulu.');return;}ev.push(id);}b.classList.toggle('on',ev.indexOf(id)>=0);b.setAttribute('aria-pressed',ev.indexOf(id)>=0);$('#dNote').textContent=ev.length+' dari 2 bukti dipilih';});
+  $('#dLock').onclick=()=>{if(opt==null){toast('Pilih kesimpulan dulu.');return;}if(ev.length<2){toast('Pilih 2 bukti pendukung.');return;}SND.sfx('stamp');S.ded[c.id]={opt:opt,ev:ev};go('outro');};
+}
+
+/* ---------- Akhir berkas ---------- */
+function rChEnd(){
+  const c=CH[S.ch];
+  if(!S.revisit)SND.sfx('closed');
+  const found=c.clues.filter(k=>S.clues[k.id]&&S.clues[k.id].found).length;
+  const wrong=c.clues.reduce((a,k)=>a+((S.clues[k.id]||{}).wrong||0),0);
+  const hints=c.clues.filter(k=>(S.clues[k.id]||{}).hint).length;
+  const last=S.ch===CH.length-1;
+  stage.innerHTML='<div class="paperpage"><span class="closedstamp">DITUTUP</span><div class="qmeta">Berkas '+c.no+' dari 4</div><h2>'+esc(c.title)+'</h2>'+
+   '<p>Kesimpulanmu sudah masuk berkas dan disegel. Penilaian lengkap baru dibuka di sidang Dinas.</p>'+
+   '<ul class="kv"><li><b>'+found+'/'+c.clues.length+'</b>bukti ditemukan</li><li><b>'+wrong+'</b>salah klik</li><li><b>'+hints+'</b>bisikan dipakai</li><li><b>'+(S.sec[c.secret.id]?'Ada':'Belum')+'</b>bukti rahasia</li><li><b>'+fmtTime(S.elapsed)+'</b>waktu berjalan</li></ul>'+
+   (S.sec[c.secret.id]?'':'<p>Ada satu benda di TKP yang tidak diberi tanda. Kamu bisa kembali ke TKP untuk mencarinya sebelum lanjut.</p>')+
+   '<div class="row noprint">'+(S.sec[c.secret.id]?'':'<button class="btn ghost" id="bBack">Kembali ke TKP</button>')+'<button class="btn" id="bNext">'+(last?'Menuju sidang Dinas':'Buka berkas berikutnya')+'</button><button class="btn ghost" id="bSave2">Simpan progres</button></div></div>';
+  const bb=$('#bBack');if(bb)bb.onclick=()=>{S.revisit=true;go('inv');};
+  $('#bSave2').onclick=openSave;
+  $('#bNext').onclick=()=>{S.revisit=false;if(last){S.ch=CH.length;go('final');}else{S.ch++;S.qi=0;S.mgDone=false;go('intro');}};
+}
+// saat revisit, tombol analisis kembali ke ringkasan berkas
+const _rInv=rInv;rInv=function(){_rInv();if(S.revisit){const b=$('#bAnalyze');if(b){b.textContent='Kembali ke ringkasan berkas';b.disabled=false;b.onclick=()=>go('chEnd');}}};
+
+/* ---------- Sidang akhir ---------- */
+function rFinalQ(){
+  let sel=S.final;const L='ABCD';
+  stage.innerHTML='<div class="casehead"><h2>Sidang Dinas</h2><span class="where">Keputusan terakhir</span></div><div class="qcard" style="max-width:980px;margin:0 auto">'+
+   '<div class="qmeta">Rekomendasi akhir</div><h2>'+esc(FINAL.q)+'</h2><div class="opts">'+FINAL.opts.map((o,i)=>'<button class="opt'+(sel===i?' sel':'')+'" data-i="'+i+'"><span class="let">'+L[i]+'</span><span>'+esc(o.t)+'</span></button>').join('')+'</div>'+
+   '<div class="qfoot"><span class="note">Keputusan ini menentukan akhir cerita.</span><button class="btn red" id="fLock" '+(sel==null?'disabled':'')+'>Serahkan laporan</button></div></div>';
+  stage.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{sel=+b.dataset.i;stage.querySelectorAll('.opt').forEach(x=>x.classList.toggle('sel',x===b));$('#fLock').disabled=false;});
+  $('#fLock').onclick=()=>{SND.sfx('gavel');S.final=sel;S.done=true;go('ending');};
+}
+function endingKind(){
+  const t=totals();const eth=CH[1].qs.find(q=>q.id==='q5b');const ethOK=qPts(eth)>=8;
+  if(t.pct>=80&&secretCount()>=3&&S.final===FINAL.best&&ethOK)return'true';
+  if(t.pct>=55)return'good';return'bad';
+}
+function rank(p,k){if(k==='true')return'Detektif Senior';if(p>=80)return'Detektif Utama';if(p>=55)return'Detektif';return'Detektif Magang';}
+function outcomes(){
+  return CH.map(c=>{const p=chPct(c);let t=p>=75?c.out.hi:(p>=50?c.out.mid:c.out.lo);
+    if(c.id==='c2'){const eth=c.qs.find(q=>q.id==='q5b');if(qPts(eth)<8)t=c.out.bad_eth;}
+    if(S.sec[c.secret.id]&&p>=60)t+=' '+c.out.sec;
+    return{lbl:'Berkas '+c.no,t:t,p:p};});
+}
+function rEnding(){
+  const k=endingKind(),E=ENDINGS[k],t=totals();
+  const oc=outcomes();
+  stage.innerHTML='<div class="ending-art">'+sceneEnding(k)+'</div><div class="paperpage"><div class="qmeta">Akhir cerita</div><h2>'+esc(E.title)+'</h2>'+
+   E.text.map(x=>'<p>'+esc(fmt(x))+'</p>').join('')+
+   '<p class="lesson"><b>'+esc(E.cons)+'</b></p>'+
+   '<ul class="kv"><li><b>'+t.pct+'%</b>skor akhir</li><li><b>'+t.score+'/'+t.max+'</b>poin (bonus rahasia +'+t.bonus+')</li><li><b>'+secretCount()+'/4</b>bukti rahasia</li><li><b>'+fmtTime(S.elapsed)+'</b>waktu penyelidikan</li><li><b>'+rank(t.pct,k)+'</b>pangkat</li></ul>'+
+   '<h3 class="tw" style="margin:18px 0 0">Nasib setiap usaha</h3><ul class="outcomes">'+oc.map(o=>'<li><span class="lbl">'+o.lbl+'</span><span>'+esc(o.t)+'</span></li>').join('')+
+   '<li><span class="lbl">Dana Rp150 juta</span><span>'+esc(S.final===FINAL.best?'Dipakai untuk pendampingan bertahap dengan tujuan terukur.':'Rekomendasimu: “'+FINAL.opts[S.final].t+'”. Dana habis tanpa menjawab masalah utama.')+'</span></li></ul>'+
+   (k==='good'&&secretCount()<3?'<p>Petunjuk untuk akhir sejati: temukan minimal 3 bukti rahasia, jawab dengan teliti, jaga etika data, dan pilih rekomendasi akhir yang tepat.</p>':'')+
+   '<div class="row noprint"><button class="btn" id="bRes">Lihat resume analisis</button></div></div>';
+  $('#bRes').onclick=()=>go('resume');
+}
+
+/* ---------- Resume ---------- */
+function cls(p,m){return p>=m?'ok':(p>0?'mid':'bad');}
+function rResume(){
+  const t=totals(),k=endingKind();
+  let h='<div class="paperpage"><div class="qmeta">Laporan akhir Biro Telisik</div><h2>Resume Analisis Detektif '+esc(S.name)+'</h2>'+
+   '<ul class="kv"><li><b>'+esc(ENDINGS[k].title.split(':')[0])+'</b>akhir cerita</li><li><b>'+t.pct+'%</b>skor</li><li><b>'+t.score+'/'+t.max+'</b>poin</li><li><b>'+fmtTime(S.elapsed)+'</b>waktu</li><li><b>'+secretCount()+'/4</b>rahasia</li></ul>'+
+   '<p>Tabel di bawah membandingkan pilihanmu dengan analisis yang seharusnya. Warna hijau berarti tepat, kuning sebagian tepat, merah keliru.</p>'+
+   '<div class="row noprint"><button class="btn" id="bPrint">Cetak atau simpan PDF</button><button class="btn ghost" id="bAgain">Main lagi</button></div>';
+  CH.forEach(c=>{
+    h+='<section class="res-ch"><h3>Berkas '+c.no+': '+esc(c.title)+'</h3><div class="qmeta">'+esc(c.materi)+' · skor '+chScore(c)+'/'+chMax(c)+' ('+chPct(c)+'%)</div>';
+    // bukti
+    h+='<div class="tablewrap"><table class="rtable"><thead><tr><th>Bukti</th><th>Salah</th><th>Bisikan</th><th>Poin</th></tr></thead><tbody>';
+    c.clues.forEach(kk=>{const st=S.clues[kk.id]||{};const p=cluePts(kk.id);h+='<tr><td>'+esc(kk.title)+'</td><td class="pt">'+(st.wrong||0)+'</td><td class="pt">'+(st.hint?'ya':'-')+'</td><td class="pt '+cls(p,5)+'">'+p+'/5</td></tr>';});
+    h+='<tr><td>★ '+esc(c.secret.title)+'</td><td class="pt">-</td><td class="pt">-</td><td class="pt '+(S.sec[c.secret.id]?'ok':'bad')+'">'+(S.sec[c.secret.id]?'+5':'0')+'</td></tr></tbody></table></div>';
+    if(c.mg){
+      h+='<div class="tablewrap"><table class="rtable"><thead><tr><th>Tebak kotak</th><th>Kamu</th><th>Kunci</th><th>Poin</th></tr></thead><tbody>';
+      c.mg.items.forEach((it,i)=>{const ok=S.mg[i]===it.a;h+='<tr><td>'+esc(it.t)+'</td><td class="pt">'+(S.mg[i]||'-')+'</td><td class="pt">'+it.a+'</td><td class="pt '+(ok?'ok':'bad')+'">'+(ok?2:0)+'/2</td></tr>';});
+      h+='</tbody></table></div>';
+    }
+    h+='<div class="tablewrap"><table class="rtable wide"><thead><tr><th style="width:27%">Pertanyaan</th><th style="width:24%">Pilihanmu</th><th style="width:7%">Poin</th><th>Seharusnya dan alasannya</th></tr></thead><tbody>';
+    c.qs.forEach(q=>{const a=S.ans[q.id];const p=qPts(q),mx=qMax(q);const bi=q.opts.findIndex(o=>o.p===mx);
+      h+='<tr><td>'+esc(q.q)+'<br><small>'+esc(q.ref)+'</small></td><td>'+(a==null?'-':esc(q.opts[a].t))+'</td><td class="pt '+cls(p,mx)+'">'+p+'/'+mx+'</td><td><b>'+esc(q.opts[bi].t)+'.</b> '+esc(q.exp)+'</td></tr>';});
+    const d=S.ded[c.id]||{opt:null,ev:[]};const dp=dedPts(c),dm=dedMax(c);const dbi=c.ded.opts.findIndex(o=>o.p===Math.max.apply(null,c.ded.opts.map(x=>x.p)));
+    h+='<tr><td>Deduksi: '+esc(c.ded.q)+'</td><td>'+(d.opt==null?'-':esc(c.ded.opts[d.opt].t))+'<br><small>Bukti: '+d.ev.map(e=>esc(clueObj(e).title)).join(', ')+'</small></td><td class="pt '+cls(dp,dm)+'">'+dp+'/'+dm+'</td><td><b>'+esc(c.ded.opts[dbi].t)+'.</b> Bukti kuat: '+c.ded.ev.map(e=>esc(clueObj(e).title)).join(', ')+'. '+esc(c.ded.exp)+'</td></tr>';
+    h+='</tbody></table></div></section>';
+  });
+  const fp=S.final==null?0:FINAL.opts[S.final].p;
+  h+='<section class="res-ch"><h3>Sidang Dinas</h3><div class="tablewrap"><table class="rtable"><thead><tr><th>Rekomendasimu</th><th>Poin</th><th>Seharusnya dan alasannya</th></tr></thead><tbody><tr><td>'+(S.final==null?'-':esc(FINAL.opts[S.final].t))+'</td><td class="pt '+cls(fp,15)+'">'+fp+'/15</td><td><b>'+esc(FINAL.opts[FINAL.best].t)+'.</b> '+esc(FINAL.exp)+'</td></tr></tbody></table></div>';
+  h+='<p class="lesson">Syarat akhir sejati: skor minimal 80%, minimal 3 bukti rahasia, menolak penjualan data pengguna, dan memilih pendampingan bertahap di sidang Dinas. Akhir baik: skor minimal 55%.</p></section></div>';
+  stage.innerHTML=h;
+  $('#bPrint').onclick=()=>window.print();
+  $('#bAgain').onclick=()=>{if(confirm('Mulai permainan baru? Progres sekarang akan hilang.')){S=fresh();go('title');}};
+}
+
+/* ---------- Buku Saku ---------- */
+function openNote(){
+  const m=$('#modal');m.classList.remove('hidden');
+  const unlocked=Math.max(0,Math.min(3,S.ch<0?0:S.ch));
+  let tab=Math.min(unlocked,openNote.tab==null?unlocked:openNote.tab);
+  function draw(){
+    m.innerHTML='<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="nbT"><div class="kind">Buku Saku Detektif</div><span class="stampmark">TEORI</span><h2 id="nbT">Ringkasan materi</h2>'+
+     '<div class="nb-tabs">'+NOTEBOOK.map((n,i)=>'<button data-t="'+i+'" class="'+(i===tab?'on':'')+'" '+(i>unlocked&&!S.done?'disabled title="Terbuka saat berkas ini dimulai"':'')+'>'+esc(n.tab)+'</button>').join('')+'</div>'+
+     '<div class="nb">'+NOTEBOOK[tab].html+'</div><div class="sheet-foot"><button class="btn" id="nbClose">Tutup Buku Saku</button></div></div>';
+    m.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{tab=+b.dataset.t;openNote.tab=tab;draw();});
+    $('#nbClose').onclick=()=>{m.classList.add('hidden');m.innerHTML='';};
+    $('#nbClose').focus({preventScroll:true});
+  }
+  draw();
+}
+$('#bNote').onclick=openNote;
+
+/* ---------- Simpan / Muat ---------- */
+function encode(o){return btoa(unescape(encodeURIComponent(JSON.stringify(o))));}
+function decode(s){return JSON.parse(decodeURIComponent(escape(atob(s.trim()))));}
+function openSave(){
+  if(!S.started){toast('Mulai permainan dulu sebelum menyimpan.');return;}
+  const code=encode(S);const m=$('#modal');m.classList.remove('hidden');
+  m.innerHTML='<div class="sheet" role="dialog" aria-modal="true"><div class="kind">Arsip progres</div><h2>Kode simpan</h2><p>Salin kode di bawah dan simpan di catatan HP atau dokumenmu. Untuk melanjutkan, buka game ini lagi, pilih “Lanjutkan dari kode simpan”, lalu tempel kodenya.</p>'+
+   '<div class="field"><textarea id="svCode" readonly>'+code+'</textarea></div><div class="sheet-foot"><button class="btn ghost" id="svCopy">Salin kode</button><button class="btn" id="svClose">Tutup</button></div></div>';
+  $('#svCopy').onclick=()=>{const ta=$('#svCode');ta.select();try{navigator.clipboard.writeText(ta.value).then(()=>toast('Kode tersalin.'),()=>{document.execCommand('copy');toast('Kode tersalin.');});}catch(e){document.execCommand('copy');toast('Kode tersalin.');}};
+  $('#svClose').onclick=()=>{m.classList.add('hidden');m.innerHTML='';};
+}
+function openLoad(){
+  const m=$('#modal');m.classList.remove('hidden');
+  m.innerHTML='<div class="sheet" role="dialog" aria-modal="true"><div class="kind">Arsip progres</div><h2>Lanjutkan penyelidikan</h2><div class="field"><label for="ldCode">Tempel kode simpan</label><textarea id="ldCode"></textarea></div><div class="sheet-foot"><button class="btn ghost" id="ldCancel">Batal</button><button class="btn" id="ldGo">Muat progres</button></div></div>';
+  $('#ldCode').focus();
+  $('#ldCancel').onclick=()=>{m.classList.add('hidden');m.innerHTML='';};
+  $('#ldGo').onclick=()=>{try{const o=decode($('#ldCode').value);if(!o||o.v!==1||typeof o.phase!=='string')throw 0;S=Object.assign(fresh(),o);m.classList.add('hidden');m.innerHTML='';
+    // fase sinematik dilanjutkan ke tahap kerja berikutnya
+    if(S.phase==='prolog'||S.phase==='intro'){if(S.ch<0)S.ch=0;S.phase='inv';}
+    if(S.phase==='outro')S.phase='chEnd';if(S.phase==='final')S.phase='finalQ';
+    toast('Progres dimuat. Selamat bekerja lagi, Detektif '+S.name+'.');render();}catch(e){toast('Kode tidak dikenali. Pastikan kodenya disalin utuh.');}};
+}
+$('#bSave').onclick=openSave;
+
+/* ---------- Tema ---------- */
+$('#bTheme').onclick=()=>{const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==='dark':window.matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=dark?'light':'dark';};
+
+render();
+</script>
+</body></html>
